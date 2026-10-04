@@ -121,7 +121,7 @@ body.modo-experto .experto-inline{display:inline-flex !important}
 .nodo circle{transition:transform var(--trans),filter var(--trans);transform-box:fill-box;transform-origin:center}
 .nodo:hover circle{transform:scale(1.08)}
 .nodo.activo circle{filter:drop-shadow(0 0 10px rgba(230,126,34,.7))}
-.nodo text{font-family:var(--fuente-titulo);font-weight:700;font-size:13px;fill:#24402c;text-anchor:middle;pointer-events:none}
+.nodo text{font-family:var(--fuente-titulo);font-weight:700;font-size:13px;fill:#24402c;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round}
 .pista{display:flex;align-items:center;gap:8px;color:#5f6f63;font-size:.84rem;margin-top:10px}
 .drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,92vw);z-index:60;background:#fff;box-shadow:-18px 0 50px rgba(20,50,30,.22);transform:translateX(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:22px;overflow:auto}
 .drawer.abierto{transform:translateX(0)}
@@ -257,6 +257,9 @@ body.modo-experto .experto-inline{display:inline-flex !important}
   .nav{width:100%;margin-left:0;overflow-x:auto}
   main{padding-top:16px}
   .huerto{gap:5px}
+  /* El grafo no se encoge: se desplaza horizontalmente para no perder legibilidad */
+  .marco-svg{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}
+  #grafo{width:600px;min-width:600px;max-width:none}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
@@ -363,7 +366,7 @@ body.modo-experto .experto-inline{display:inline-flex !important}
     <p style="max-width:75ch;color:#42523f">Todo en el huerto está conectado. Toca cada elemento para ver cómo ayuda a las hortalizas de hoja y de raíz, y cómo se relacionan entre sí.</p>
     <div class="eco-layout">
       <div class="marco-svg">
-        <svg id="grafo" viewBox="0 0 600 420" role="group" aria-label="Grafo del ecosistema del huerto"></svg>
+        <svg id="grafo" viewBox="0 0 680 500" role="group" aria-label="Grafo del ecosistema del huerto"></svg>
       </div>
       <p class="pista">
         <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#3498DB"/></svg>
@@ -669,25 +672,25 @@ const CAPAS_SUELO = [
 
 /* B.4 Nodos y aristas del ecosistema (grafo SVG) */
 const NODOS_ECOSISTEMA = [
-  { id:"suelo", nombre:"Suelo", x:300, y:340, color:"#8a5a2b", icono:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="24" width="52" height="34" rx="8" fill="#8a5a2b"/><rect x="6" y="24" width="52" height="10" rx="5" fill="#6b4a25"/><path d="M22 18 C22 10 30 6 32 6 C34 6 42 10 42 18 C42 22 36 24 32 24 C28 24 22 22 22 18 Z" fill="#2ECC71"/></svg>',
+  { id:"suelo", nombre:"Suelo", x:250, y:390, color:"#8a5a2b", icono:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="24" width="52" height="34" rx="8" fill="#8a5a2b"/><rect x="6" y="24" width="52" height="10" rx="5" fill="#6b4a25"/><path d="M22 18 C22 10 30 6 32 6 C34 6 42 10 42 18 C42 22 36 24 32 24 C28 24 22 22 22 18 Z" fill="#2ECC71"/></svg>',
     basico:"Es el hogar de las raíces. Aporta agua, aire y minerales, y guarda los nutrientes que las plantas necesitan.",
     experto:"Soporte físico y químico del sistema radicular. Su estructura (agregados), porosidad y capacidad de intercambio catiónico determinan la disponibilidad de agua y de macro y micronutrientes. La materia orgánica mejora su fertilidad y su actividad microbiana." },
-  { id:"agua", nombre:"Agua", x:110, y:220, color:"#3498DB", icono:ICONOS.agua,
+  { id:"agua", nombre:"Agua", x:100, y:270, color:"#3498DB", icono:ICONOS.agua,
     basico:"Todo ser vivo la necesita. Con riego suficiente y constante las hortalizas crecen sanas; el exceso pudre las raíces.",
     experto:"El agua transporta nutrientes y regula la temperatura. La disponibilidad hídrica depende de la textura y de la capacidad de campo del suelo. El riego debe ajustarse a cada cultivo: las hortalizas de hoja demandan más humedad que las de raíz o los bulbos." },
-  { id:"sol", nombre:"Sol", x:490, y:90, color:"#F1C40F", icono:ICONOS.sol,
+  { id:"sol", nombre:"Sol", x:520, y:110, color:"#F1C40F", icono:ICONOS.sol,
     basico:"Da la energía para que las plantas fabriquen su alimento. Casi todas piden entre 6 y 8 horas de luz al día.",
     experto:"Motor de la fotosíntesis. La radiación fotosintéticamente activa (PAR) determina el crecimiento y la acumulación de azúcares y vitaminas. Cultivos de fruto como tomate y pimiento requieren pleno sol; lechuga y espinaca toleran semisombra." },
-  { id:"hoja", nombre:"Hortalizas de hoja", x:140, y:120, color:"#2ECC71", icono:ICONOS.lechuga,
+  { id:"hoja", nombre:"Hortalizas de hoja", x:150, y:110, color:"#2ECC71", icono:ICONOS.lechuga,
     basico:"Lechuga, acelga y espinaca: crecen rápido, piden bastante agua y agradecen algo de sombra si hace mucho calor.",
     experto:"Grupo de ciclo corto y alta relación superficie/volumen. Sensibles a la espigazón por calor y a la deshidratación. Responden muy bien al nitrógeno y a la materia orgánica; aportan vitaminas A, C y folatos." },
-  { id:"raiz", nombre:"Hortalizas de raíz", x:430, y:330, color:"#E67E22", icono:ICONOS.zanahoria,
+  { id:"raiz", nombre:"Hortalizas de raíz", x:440, y:390, color:"#E67E22", icono:ICONOS.zanahoria,
     basico:"Zanahoria, remolacha o papa: necesitan un suelo suelto y profundo para que su raíz crezca derecha y grande.",
     experto:"Cultivos de órgano de reserva subterráneo. Exigen suelos profundos, sin piedras ni costras, y buen drenaje. El exceso de nitrógeno favorece el follaje en detrimento de la raíz. Aportan hidratos de carbono, hierro y fibra." },
-  { id:"companeras", nombre:"Plantas compañeras", x:300, y:140, color:"#27AE60", icono:ICONOS.albahaca,
+  { id:"companeras", nombre:"Plantas compañeras", x:330, y:100, color:"#27AE60", icono:ICONOS.albahaca,
     basico:"Asociar bien las plantas ayuda: unas ahuyentan insectos y otras enriquecen la tierra. Por ejemplo, albahaca con tomate.",
     experto:"Asociación e intercultivo (companion planting). Basado en alelopatía, repelencia de plagas, atracción de polinizadores y complementariedad de nichos. Las leguminosas fijan nitrógeno; las aromáticas segregan compuestos volátiles biocidas." },
-  { id:"nutrientes", nombre:"Nutrientes", x:500, y:240, color:"#8E44AD", icono:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#8E44AD"/><circle cx="24" cy="26" r="5" fill="#c39bd3"/><circle cx="40" cy="38" r="7" fill="#c39bd3"/></svg>',
+  { id:"nutrientes", nombre:"Nutrientes", x:540, y:270, color:"#8E44AD", icono:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#8E44AD"/><circle cx="24" cy="26" r="5" fill="#c39bd3"/><circle cx="40" cy="38" r="7" fill="#c39bd3"/></svg>',
     basico:"Son como la comida de las plantas: nitrógeno, fósforo, potasio y minerales como el hierro y el zinc.",
     experto:"Macronutrientes (N, P, K, Ca, Mg, S) y micronutrientes (Fe, Zn, Mn, Cu, B, Mo). Su disponibilidad depende del pH y de la materia orgánica. Un suelo equilibrado produce hortalizas más ricas en vitaminas A, C y del complejo B." }
 ];
