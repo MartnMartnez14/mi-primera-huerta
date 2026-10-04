@@ -1,0 +1,1639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Primera Huerta · Huerto familiar orgánico y nutritivo</title>
+<meta name="description" content="SPA educativa para aprender a crear un huerto familiar orgánico y nutritivo, basada en el manual PMA/MAGAP Ecuador.">
+<!-- Fuentes Google (única dependencia externa; hay fallback system-ui sin conexión) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Nunito:wght@400;600;700&family=Rubik:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================================
+   1. VARIABLES Y BASE
+   Paleta natural vibrante. Cada sección define su propio --acento.
+   ========================================================================= */
+:root{
+  --verde:#2ECC71; --verde-osc:#27AE60; --verde-prof:#1e8449;
+  --tierra:#E67E22; --tierra-osc:#b35f0e;
+  --azul:#3498DB; --azul-osc:#2471a3;
+  --amarillo:#F1C40F; --morado:#8E44AD; --rojo:#E74C3C;
+  --tinta:#1f2d24; --gris:#f3f7f3; --gris-borde:#dfe8df; --blanco:#fff;
+  --radio:18px; --radio-sm:10px;
+  --sombra:0 10px 28px rgba(20,50,30,.10);
+  --sombra-hover:0 16px 40px rgba(20,50,30,.18);
+  --trans:.25s ease;
+  --fuente-titulo:'Montserrat','Rubik',system-ui,sans-serif;
+  --fuente-texto:'Nunito','Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:var(--fuente-texto);color:var(--tinta);
+  background:
+    radial-gradient(1200px 600px at 15% -10%, #e9f8ee 0%, transparent 60%),
+    radial-gradient(1000px 500px at 100% 0%, #fdf3e5 0%, transparent 55%),
+    var(--gris);
+  line-height:1.55;min-height:100vh;
+}
+h1,h2,h3,h4{font-family:var(--fuente-titulo);line-height:1.15;margin:0 0 .4em}
+p{margin:0 0 .8em}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--verde-prof)}
+[hidden]{display:none !important}
+:focus-visible{outline:3px solid var(--tinta);outline-offset:2px;border-radius:6px}
+.contenedor{width:min(1180px,94vw);margin-inline:auto}
+.salto-visual{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.salto-visual:focus{position:fixed;top:8px;left:8px;width:auto;height:auto;clip:auto;background:#fff;color:var(--tinta);padding:10px 14px;border-radius:8px;box-shadow:var(--sombra);z-index:100}
+
+/* =========================================================================
+   2. CABECERA Y NAVEGACIÓN
+   ========================================================================= */
+.cabecera{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--gris-borde)}
+.cabecera-fila{display:flex;align-items:center;gap:12px;padding:10px 0;flex-wrap:wrap}
+.marca{display:flex;align-items:center;gap:10px;font-family:var(--fuente-titulo);font-weight:800;font-size:1.05rem}
+.marca svg{width:40px;height:40px;flex:0 0 auto}
+.marca small{display:block;font-family:var(--fuente-texto);font-weight:600;font-size:.66rem;color:#5c6b60;text-transform:uppercase;letter-spacing:.06em}
+.nav{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+.nav-btn{border:1px solid transparent;background:transparent;color:#38493c;font-weight:700;font-size:.86rem;padding:8px 12px;border-radius:999px;transition:var(--trans);white-space:nowrap;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+.nav-btn:hover{background:#eaf6ee;color:var(--verde-prof)}
+.nav-btn.activo{background:var(--verde-prof);color:#fff;box-shadow:0 6px 16px rgba(39,174,96,.35)}
+.modo{display:flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;color:#4a5a4e}
+.interruptor{position:relative;width:56px;height:30px;border-radius:999px;border:none;background:#cfd9d1;transition:var(--trans);padding:0;flex:0 0 auto}
+.interruptor::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:var(--trans)}
+.interruptor[aria-checked="true"]{background:var(--tierra)}
+.interruptor[aria-checked="true"]::after{transform:translateX(26px)}
+/* Área táctil ampliada (>=44px) sin alterar el tamaño visual del interruptor */
+.interruptor::before{content:"";position:absolute;inset:-7px -4px;border-radius:999px}
+
+/* =========================================================================
+   3. VISTAS Y COMPONENTES GENERALES
+   ========================================================================= */
+main{padding:26px 0 70px}
+.vista{animation:entrar .35s ease}
+@keyframes entrar{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.hero{display:grid;grid-template-columns:1.3fr .9fr;gap:26px;align-items:center;background:linear-gradient(135deg,#fff,#eefaf1);border:1px solid var(--gris-borde);border-radius:calc(var(--radio) + 6px);padding:34px;box-shadow:var(--sombra);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:auto -60px -80px auto;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,#ffe9c7,transparent 70%)}
+.hero .etiqueta{display:inline-block;background:#e6f7ec;color:var(--verde-prof);font-weight:800;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;margin-bottom:10px}
+.hero h1{font-size:clamp(1.7rem,3.4vw,2.6rem)}
+.hero p{font-size:1.03rem;max-width:52ch;color:#3c4c40}
+.hero-arte svg{width:100%;height:auto;display:block}
+.seccion-titulo{display:flex;align-items:center;gap:12px;margin:34px 0 18px}
+.seccion-titulo .punto{width:14px;height:14px;border-radius:50%;background:var(--acento,var(--verde));box-shadow:0 0 0 6px rgba(46,204,113,.16)}
+.seccion-titulo h2{margin:0;font-size:clamp(1.25rem,2.4vw,1.7rem)}
+.seccion-titulo .sub{margin-left:auto;color:#6a7a6e;font-size:.86rem;font-weight:600}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
+.card{background:var(--blanco);border:1px solid var(--gris-borde);border-radius:var(--radio);padding:20px;box-shadow:var(--sombra);transition:transform var(--trans),box-shadow var(--trans),border-color var(--trans)}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sombra-hover);border-color:var(--acento,var(--verde))}
+.card .icono-grande{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;margin-bottom:12px;background:#f0f7f2}
+.card .icono-grande svg{width:32px;height:32px}
+.card h3{font-size:1.02rem;margin-bottom:.25em}
+.card p{font-size:.92rem;color:#4a5a4e;margin:0}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:.74rem;font-weight:800;background:#eef4ef;color:#40514a;margin:2px 4px 2px 0}
+.chip.dificil-facil{background:#e6f7ec;color:var(--verde-prof)}
+.chip.dificil-media{background:#fdf3e5;color:var(--tierra-osc)}
+.chip.dificil-avanzada{background:#fdecea;color:#b03a2e}
+.btn{border:none;border-radius:999px;padding:10px 18px;font-weight:800;font-size:.9rem;background:var(--acento,var(--verde-prof));color:#fff;transition:var(--trans);box-shadow:0 8px 20px rgba(39,174,96,.3)}
+.btn:hover{transform:translateY(-2px)}
+.btn.secundario{background:#fff;color:var(--tinta);border:1px solid var(--gris-borde);box-shadow:none}
+.btn.secundario:hover{border-color:var(--acento,var(--verde));color:var(--acento,var(--verde-prof))}
+/* Helper modo experto: el contenido técnico se oculta por defecto */
+.experto-contenido{display:none}
+body.modo-experto .experto-contenido{display:block}
+.experto-inline{display:none !important}
+body.modo-experto .experto-inline{display:inline-flex !important}
+/* Los contenedores de icono escalan su SVG interno */
+.icono-planta{display:block}
+.icono-planta svg{width:100%;height:100%;display:block}
+/* Contenido experto desplegable dentro del drawer */
+.panel-suelo.abierto{display:block}
+
+/* =========================================================================
+   4. VISTA ECOSISTEMA (grafo SVG + drawer)
+   ========================================================================= */
+.eco-layout{display:grid;grid-template-columns:1fr;gap:0}
+.marco-svg{background:linear-gradient(160deg,#fff,#f1faf4);border:1px solid var(--gris-borde);border-radius:var(--radio);box-shadow:var(--sombra);overflow:hidden}
+#grafo{width:100%;height:auto;display:block;touch-action:manipulation}
+.arista{stroke:#c4d3c8;stroke-width:2;transition:stroke var(--trans),stroke-width var(--trans),opacity var(--trans)}
+.arista.activa{stroke:var(--tierra);stroke-width:4;opacity:1}
+.nodo{cursor:pointer}
+.nodo circle{transition:transform var(--trans),filter var(--trans);transform-box:fill-box;transform-origin:center}
+.nodo:hover circle{transform:scale(1.08)}
+.nodo.activo circle{filter:drop-shadow(0 0 10px rgba(230,126,34,.7))}
+.nodo text{font-family:var(--fuente-titulo);font-weight:700;font-size:13px;fill:#24402c;text-anchor:middle;pointer-events:none}
+.pista{display:flex;align-items:center;gap:8px;color:#5f6f63;font-size:.84rem;margin-top:10px}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(420px,92vw);z-index:60;background:#fff;box-shadow:-18px 0 50px rgba(20,50,30,.22);transform:translateX(105%);transition:transform .32s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;padding:22px;overflow:auto}
+.drawer.abierto{transform:translateX(0)}
+.drawer h2{font-size:1.3rem;padding-right:36px}
+.drawer .cerrar-x{position:absolute;top:16px;right:16px}
+.cerrar-x{width:44px;height:44px;border-radius:50%;border:1px solid var(--gris-borde);background:#fff;display:grid;place-items:center;transition:var(--trans)}
+.cerrar-x:hover{background:#f3f7f3;transform:rotate(90deg)}
+.cerrar-x svg{width:18px;height:18px}
+.drawer .nodo-preview{width:74px;height:74px;border-radius:20px;display:grid;place-items:center;margin-bottom:14px;background:#f0f7f2}
+.drawer .nodo-preview svg{width:46px;height:46px}
+.panel-suelo{padding:14px;border-radius:var(--radio-sm);background:#f7faf7;border:1px solid var(--gris-borde);margin-top:10px}
+
+/* =========================================================================
+   5. VISTA SUELO (barra apilada SVG + modal)
+   ========================================================================= */
+.suelo-layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;align-items:start}
+#suelo{width:100%;height:auto;display:block;max-width:360px;margin-inline:auto}
+#suelo .capa{cursor:pointer;transition:transform var(--trans);transform-box:fill-box;transform-origin:left center}
+#suelo .capa:hover{transform:translateX(8px)}
+#suelo .nombre-capa{opacity:0;transition:var(--trans);font-family:var(--fuente-titulo);font-size:13px;fill:#243}
+#suelo .capa:hover .nombre-capa{opacity:1}
+#suelo text.letra{font-family:var(--fuente-titulo);font-weight:800;font-size:20px;fill:#fff}
+.lista-capas{display:grid;gap:12px}
+.capa-item{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio-sm);padding:14px;cursor:pointer;transition:var(--trans);text-align:left;width:100%}
+.capa-item:hover{transform:translateX(4px);border-color:var(--tierra)}
+.capa-color{width:14px;height:14px;border-radius:4px;margin-top:6px;flex:0 0 auto}
+.capa-item .capa-item-titulo{display:block;margin:0;font-size:.98rem;font-family:var(--fuente-titulo);font-weight:700;line-height:1.15}
+.capa-item .capa-item-resumen{display:block;margin:.15em 0 0;font-size:.85rem;color:#56655a}
+
+/* =========================================================================
+   6. VISTA HORTALIZAS (grid + detalle)
+   ========================================================================= */
+.grid-hortalizas{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+.tarjeta-h{--acento:var(--verde);background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:16px;text-align:center;box-shadow:var(--sombra);cursor:pointer;transition:transform var(--trans),box-shadow var(--trans),border-color var(--trans);display:flex;flex-direction:column;align-items:center;gap:6px}
+.tarjeta-h:hover{transform:translateY(-5px) scale(1.01);box-shadow:var(--sombra-hover);border-color:var(--acento)}
+.tarjeta-h .icono-planta{width:66px;height:66px}
+.tarjeta-h .t-nombre{display:block;margin:0;font-size:1rem;font-family:var(--fuente-titulo);font-weight:700;line-height:1.15}
+.tipo-tag{font-size:.72rem;font-weight:800;color:var(--acento-txt,#fff);background:var(--acento);padding:3px 10px;border-radius:999px;letter-spacing:.03em}
+.fila-mini{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;font-size:.76rem;color:#5c6b60;font-weight:700}
+.fila-mini svg{width:16px;height:16px}
+.detalle-cabecera{display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:center;background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:22px;box-shadow:var(--sombra)}
+.detalle-cabecera .icono-planta{width:96px;height:96px}
+.detalle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:20px}
+.bloque{background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:18px;box-shadow:var(--sombra)}
+.bloque h3{font-size:1rem;margin-bottom:.5em}
+.lista-plantas{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.lista-plantas li{display:flex;align-items:center;gap:10px;background:#f7faf7;border-radius:var(--radio-sm);padding:8px 12px;font-weight:600}
+.lista-plantas li.si{background:#e6f7ec;color:var(--verde-prof)}
+.lista-plantas li.no{background:#fdecea;color:#b03a2e}
+.lista-plantas svg{width:18px;height:18px;flex:0 0 auto}
+.esquema{width:100%;height:auto;display:block}
+.dato-barra{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:.85rem}
+.dato-barra .pista{width:96px;height:10px;border-radius:999px;background:#e9efe9;overflow:hidden;flex:1;margin:0}
+.dato-barra .pista span{display:block;height:100%;border-radius:999px;background:var(--acento,var(--verde))}
+
+/* =========================================================================
+   7. VISTA DISEÑO (drag & drop)
+   ========================================================================= */
+.diseno-layout{display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start}
+.panel-contadores{display:flex;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:14px;box-shadow:var(--sombra);margin-bottom:16px}
+.contador{display:flex;align-items:center;gap:8px;background:#f3f8f4;border-radius:999px;padding:6px 12px;font-weight:800;font-size:.82rem}
+.contador svg{width:22px;height:22px}
+.contador .num{background:var(--verde-prof);color:#fff;border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.78rem;padding-inline:6px}
+.paleta{background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:14px;box-shadow:var(--sombra);max-height:70vh;overflow:auto}
+.paleta h3{font-size:.95rem}
+.paleta-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--gris-borde);border-radius:var(--radio-sm);margin-bottom:8px;background:#fbfdfb;cursor:grab;transition:var(--trans);user-select:none;touch-action:none}
+.paleta-item:hover{border-color:var(--tierra);background:#fff8f0;transform:translateX(3px)}
+.paleta-item:active{cursor:grabbing}
+.paleta-item.seleccionada{border-color:var(--verde-prof);background:#e6f7ec;box-shadow:0 0 0 2px var(--verde-prof)}
+.paleta-item svg{width:34px;height:34px;flex:0 0 auto}
+.paleta-item .pi-nombre{font-weight:800;font-size:.84rem}
+.paleta-item .pi-tipo{font-size:.7rem;color:#68786c;font-weight:700}
+.huerto-marco{background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:16px;box-shadow:var(--sombra)}
+.huerto{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;aspect-ratio:1/1;max-width:620px;margin-inline:auto}
+.celda{position:relative;border:2px dashed #d6e2d9;border-radius:12px;background:linear-gradient(135deg,#fafdfa,#f1f7f2);display:grid;place-items:center;transition:var(--trans);min-height:52px}
+.celda .icono-planta{width:70%;height:70%}
+.celda.sobre{border-color:var(--azul);background:#eaf4fd;transform:scale(1.03)}
+.celda.ocupada{border-style:solid;border-color:var(--gris-borde);background:#fff;cursor:pointer}
+.celda.incompatible{border:3px dashed var(--rojo);box-shadow:0 0 0 3px rgba(231,76,60,.14)}
+.celda.compatible{border:3px solid var(--verde);box-shadow:0 0 14px rgba(46,204,113,.6)}
+.celda.boost{border:3px solid var(--amarillo);box-shadow:0 0 14px rgba(241,196,15,.7)}
+.celda .badge-boost{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:var(--amarillo);display:grid;place-items:center}
+.celda .badge-boost svg{width:14px;height:14px}
+.celda .tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) translateY(4px);background:#2b1a12;color:#ffe6d6;font-size:.7rem;font-weight:700;padding:6px 9px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:var(--trans);z-index:5}
+.celda.incompatible:hover .tip,
+.celda.incompatible:focus-visible .tip,
+.celda.incompatible:focus-within .tip{opacity:1;transform:translateX(-50%) translateY(0)}
+.leyenda-diseno{display:flex;gap:14px;flex-wrap:wrap;font-size:.78rem;color:#5b6b5f;font-weight:700;margin-top:12px;justify-content:center}
+.leyenda-diseno span{display:inline-flex;align-items:center;gap:6px}
+.punto-leyenda{width:14px;height:14px;border-radius:4px;display:inline-block}
+#ghost{position:fixed;z-index:80;pointer-events:none;width:56px;height:56px;opacity:0;transform:translate(-50%,-50%);transition:opacity .1s}
+#ghost.visible{opacity:.9}
+
+/* =========================================================================
+   8. VISTA NUTRICIÓN (radar SVG)
+   ========================================================================= */
+.nutri-layout{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+#radar{width:100%;height:auto;display:block}
+.selector-nutri{background:#fff;border:1px solid var(--gris-borde);border-radius:var(--radio);padding:14px;box-shadow:var(--sombra);max-height:70vh;overflow:auto}
+.selector-nutri label{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:9px;font-weight:700;font-size:.85rem;cursor:pointer;transition:var(--trans)}
+.selector-nutri label:hover{background:#f2f8f4}
+.selector-nutri input{width:18px;height:18px;accent-color:var(--verde-prof)}
+.selector-nutri svg{width:28px;height:28px}
+.leyenda-radar{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:12px;font-weight:800;font-size:.84rem}
+.leyenda-radar span{display:inline-flex;align-items:center;gap:7px}
+.muestra-color{width:16px;height:16px;border-radius:50%}
+.aviso-nutri{font-size:.8rem;color:#8a5a00;background:#fff8e1;border:1px solid #f6e2a8;border-radius:9px;padding:8px 10px;margin-top:8px}
+
+/* =========================================================================
+   9. MODAL
+   ========================================================================= */
+.modal{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:18px}
+.modal-fondo{position:absolute;inset:0;background:rgba(20,40,28,.55);backdrop-filter:blur(3px)}
+.modal-caja{position:relative;background:#fff;border-radius:var(--radio);max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:26px;box-shadow:0 30px 70px rgba(0,0,0,.35)}
+.modal-caja h2{font-size:1.3rem;padding-right:38px}
+.modal-caja .cerrar-x{position:absolute;top:16px;right:16px}
+.ilustracion-suelo{width:100%;max-width:520px;display:block;margin:0 auto 10px}
+
+/* =========================================================================
+   10. RESPONSIVE Y MOVIMIENTO REDUCIDO
+   ========================================================================= */
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .suelo-layout{grid-template-columns:1fr}
+  .diseno-layout{grid-template-columns:1fr}
+  /* En móvil la cuadrícula va antes que la paleta para el flujo "toca y coloca" */
+  .diseno-layout .huerto-marco{order:-1}
+  .nutri-layout{grid-template-columns:1fr}
+  .detalle-cabecera{grid-template-columns:1fr;text-align:center;justify-items:center}
+}
+@media (max-width:640px){
+  .marca small{display:none}
+  .nav{width:100%;margin-left:0;overflow-x:auto}
+  main{padding-top:16px}
+  .huerto{gap:5px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
+</style>
+</head>
+<body>
+<a class="salto-visual" href="#app">Ir al contenido</a>
+<!-- ======================= CABECERA ======================= -->
+<header class="cabecera">
+  <div class="contenedor cabecera-fila">
+    <div class="marca">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <circle cx="32" cy="40" r="20" fill="#eaf7ee"/>
+        <path d="M32 46 L32 24" stroke="#27AE60" stroke-width="4" stroke-linecap="round"/>
+        <path d="M32 30 C22 30 16 22 16 12 C26 14 32 22 32 30 Z" fill="#2ECC71"/>
+        <path d="M32 30 C42 30 48 22 48 12 C38 14 32 22 32 30 Z" fill="#27AE60"/>
+        <path d="M18 46 H46" stroke="#E67E22" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <span>Mi Primera Huerta<small>Huerto familiar orgánico y nutritivo</small></span>
+    </div>
+    <nav class="nav" aria-label="Navegación principal">
+      <button class="nav-btn activo" data-vista="inicio">Inicio</button>
+      <button class="nav-btn" data-vista="ecosistema">El Ecosistema</button>
+      <button class="nav-btn" data-vista="suelo">Conoce tu Suelo</button>
+      <button class="nav-btn" data-vista="hortalizas">Elige tus Hortalizas</button>
+      <button class="nav-btn" data-vista="diseno">Diseña tu Huerto</button>
+      <button class="nav-btn" data-vista="nutricion">Nutrición y Salud</button>
+    </nav>
+    <div class="modo">
+      <span id="modo-texto">Novato</span>
+      <button id="btn-modo" class="interruptor" role="switch" aria-checked="false" aria-label="Activar modo experto" title="Cambiar entre modo Novato y Experto"></button>
+    </div>
+  </div>
+</header>
+
+<main class="contenedor" id="app">
+
+  <!-- ======================= VISTA 1: INICIO ======================= -->
+  <section id="vista-inicio" class="vista" style="--acento:var(--verde)">
+    <div class="hero">
+      <div>
+        <span class="etiqueta">Manual PMA / MAGAP · Ecuador</span>
+        <h1>Cultiva tu propia comida, aunque nunca hayas plantado nada</h1>
+        <p>Un <strong>huerto familiar</strong> es un pequeño espacio —patio, terraza o macetas— donde siembras hortalizas para comer mejor, ahorrar y aprender. No necesitas ser experto: solo tierra, agua, sol y ganas.</p>
+        <p>Esta guía te acompaña paso a paso, con un lenguaje sencillo que puedes ampliar cuando quieras activando el <strong>modo Experto</strong>.</p>
+        <button class="btn" data-vista="ecosistema">Empezar la guía</button>
+      </div>
+      <div class="hero-arte" aria-hidden="true">
+        <svg viewBox="0 0 320 260">
+          <ellipse cx="160" cy="228" rx="140" ry="20" fill="#e7f3ea"/>
+          <circle cx="258" cy="52" r="30" fill="#F1C40F"/>
+          <g stroke="#F1C40F" stroke-width="4" stroke-linecap="round">
+            <line x1="258" y1="8" x2="258" y2="0"/><line x1="300" y1="52" x2="318" y2="52"/>
+            <line x1="288" y1="22" x2="301" y2="9"/><line x1="228" y1="22" x2="215" y2="9"/>
+          </g>
+          <rect x="20" y="180" width="280" height="48" rx="10" fill="#a9743f"/>
+          <rect x="20" y="180" width="280" height="14" rx="7" fill="#8a5a2b"/>
+          <g><rect x="70" y="130" width="10" height="52" fill="#1e8449"/><circle cx="75" cy="124" r="22" fill="#2ECC71"/><circle cx="58" cy="138" r="14" fill="#27AE60"/><circle cx="92" cy="138" r="14" fill="#27AE60"/></g>
+          <g><rect x="155" y="120" width="10" height="60" fill="#1e8449"/><circle cx="160" cy="116" r="20" fill="#E74C3C"/><path d="M160 104 l-8 -6 l8 2 l8 -2 z" fill="#27AE60"/></g>
+          <g><rect x="235" y="140" width="9" height="42" fill="#1e8449"/><path d="M239 142 C224 142 216 130 216 116 C232 118 239 130 239 142 Z" fill="#2ECC71"/><path d="M239 142 C254 142 262 130 262 116 C246 118 239 130 239 142 Z" fill="#27AE60"/></g>
+          <path d="M110 196 q50 -18 100 0" stroke="#7BE495" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="seccion-titulo"><span class="punto"></span><h2>¿Por qué tener un huerto familiar?</h2></div>
+    <div class="cards">
+      <article class="card" style="--acento:var(--verde)">
+        <div class="icono-grande"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="#2ECC71"/><path d="M32 14 L26 8 L32 10 L38 8 Z" fill="#27AE60"/></svg></div>
+        <h3>Comida más fresca y sana</h3>
+        <p>Recoges las hortalizas en su punto, sin químicos raros, con más vitaminas y mejor sabor para tu familia.</p>
+      </article>
+      <article class="card" style="--acento:var(--tierra)">
+        <div class="icono-grande"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 54 C32 36 20 30 12 14 C30 16 40 28 32 54 Z" fill="#E67E22"/><path d="M32 54 C32 36 44 30 52 14 C34 16 24 28 32 54 Z" fill="#F39C12"/></svg></div>
+        <h3>Ahorro en la mesa</h3>
+        <p>Produces parte de tu alimento y reduces gastos. Con pocas macetas ya obtienes lechuga, hierbas y más.</p>
+      </article>
+      <article class="card" style="--acento:var(--azul)">
+        <div class="icono-grande"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 8 C44 24 50 32 50 40 a18 18 0 0 1 -36 0 C14 32 20 24 32 8 Z" fill="#3498DB"/></svg></div>
+        <h3>Actividad y bienestar</h3>
+        <p>Sembrar, regar y cosechar es ejercicio suave y una terapia que conecta a grandes y niños con la naturaleza.</p>
+      </article>
+      <article class="card" style="--acento:var(--amarillo)">
+        <div class="icono-grande"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="30" width="40" height="24" rx="6" fill="#8a5a2b"/><circle cx="22" cy="30" r="10" fill="#2ECC71"/><circle cx="42" cy="30" r="10" fill="#27AE60"/></svg></div>
+        <h3>Cuidas el ambiente</h3>
+        <p>Reutilizas agua y restos orgánicos, produces compost y enseñas a los niños de dónde viene la comida.</p>
+      </article>
+    </div>
+
+    <div class="seccion-titulo"><span class="punto"></span><h2>Tu recorrido de aprendizaje</h2><span class="sub">5 pasos</span></div>
+    <div class="cards">
+      <article class="card" style="--acento:var(--verde)"><h3>1 · El Ecosistema</h3><p>Descubre cómo suelo, agua, sol y plantas trabajan juntos.</p></article>
+      <article class="card" style="--acento:var(--tierra)"><h3>2 · Conoce tu Suelo</h3><p>Aprende qué hay bajo tus pies y qué necesita tu huerto.</p></article>
+      <article class="card" style="--acento:var(--azul)"><h3>3 · Elige tus Hortalizas</h3><p>Conoce 17 cultivos, su siembra y con quién se llevan bien.</p></article>
+      <article class="card" style="--acento:var(--verde-osc)"><h3>4 · Diseña tu Huerto</h3><p>Arrastra plantas a la cuadrícula y evita malas vecinas.</p></article>
+      <article class="card" style="--acento:var(--amarillo)"><h3>5 · Nutrición y Salud</h3><p>Compara vitaminas y minerales con un gráfico de radar.</p></article>
+    </div>
+  </section>
+
+  <!-- ======================= VISTA 2: ECOSISTEMA ======================= -->
+  <section id="vista-ecosistema" class="vista" hidden style="--acento:var(--verde-osc)">
+    <div class="seccion-titulo"><span class="punto"></span><h2>El ecosistema del huerto</h2><span class="sub">Haz clic en un nodo</span></div>
+    <p style="max-width:75ch;color:#42523f">Todo en el huerto está conectado. Toca cada elemento para ver cómo ayuda a las hortalizas de hoja y de raíz, y cómo se relacionan entre sí.</p>
+    <div class="eco-layout">
+      <div class="marco-svg">
+        <svg id="grafo" viewBox="0 0 600 420" role="group" aria-label="Grafo del ecosistema del huerto"></svg>
+      </div>
+      <p class="pista">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="#3498DB"/></svg>
+        Las líneas muestran relaciones: suelo, agua, sol, plantas compañeras y nutrientes alimentan a las hortalizas.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======================= VISTA 3: SUELO ======================= -->
+  <section id="vista-suelo" class="vista" hidden style="--acento:var(--tierra)">
+    <div class="seccion-titulo"><span class="punto"></span><h2>Conoce tu suelo</h2><span class="sub">Pasa el cursor y haz clic</span></div>
+    <p style="max-width:75ch;color:#42523f">El suelo es un ser vivo. Está formado por <strong>horizontes</strong> (capas) que se apilan desde la superficie hasta la roca madre. Pasa el cursor para expandir cada capa y haz clic para ver su explicación completa.</p>
+    <div class="suelo-layout">
+      <div class="marco-svg" style="padding:10px">
+        <svg id="suelo" viewBox="0 0 400 340" role="list" aria-label="Horizontes del suelo O, A, B y C"></svg>
+      </div>
+      <div class="lista-capas" id="lista-capas"></div>
+    </div>
+  </section>
+
+  <!-- ======================= VISTA 4: HORTALIZAS ======================= -->
+  <section id="vista-hortalizas" class="vista" hidden style="--acento:var(--azul)">
+    <div class="seccion-titulo"><span class="punto"></span><h2>Elige tus hortalizas</h2><span class="sub">17 cultivos · 9 clases</span></div>
+    <p style="max-width:75ch;color:#42523f">Haz clic en cualquier tarjeta para ver cómo sembrarla, cuánto sol y agua necesita y con qué plantas se lleva bien o mal.</p>
+    <div class="grid-hortalizas" id="grid-hortalizas"></div>
+  </section>
+
+  <!-- ======================= VISTA 4b: DETALLE HORTALIZA ======================= -->
+  <section id="vista-detalle" class="vista" hidden style="--acento:var(--azul)">
+    <button class="btn secundario" id="btn-volver-catalogo" style="margin-bottom:16px">← Volver al catálogo</button>
+    <div id="detalle-contenido"></div>
+  </section>
+
+  <!-- ======================= VISTA 5: DISEÑO ======================= -->
+  <section id="vista-diseno" class="vista" hidden style="--acento:var(--verde)">
+    <div class="seccion-titulo"><span class="punto"></span><h2>Diseña tu huerto</h2><span class="sub">Arrastra o toca y suelta</span></div>
+    <p style="max-width:75ch;color:#42523f">Arrastra hortalizas desde la paleta a la cuadrícula de 6×6. El huerto revisará las <strong>cuatro vecinas</strong> de cada celda: borde rojo punteado = mala vecindad; borde verde/amarillo = buena compañía.</p>
+    <div class="panel-contadores" id="panel-contadores" aria-live="polite"></div>
+    <div class="diseno-layout">
+      <aside class="paleta" id="paleta" aria-label="Paleta de hortalizas">
+        <h3>Paleta de plantas</h3>
+        <p style="font-size:.78rem;color:#68786c;margin-top:-.4em">Mantén y arrastra hacia una celda.</p>
+      </aside>
+      <div class="huerto-marco">
+        <div class="huerto" id="huerto" role="grid" aria-label="Cuadrícula del huerto de 6 por 6"></div>
+        <div class="leyenda-diseno">
+          <span><i class="punto-leyenda" style="background:var(--verde)"></i> Buena vecina</span>
+          <span><i class="punto-leyenda" style="background:var(--amarillo)"></i> Impulsa (boost)</span>
+          <span><i class="punto-leyenda" style="background:var(--rojo)"></i> Incompatible</span>
+          <span><i class="punto-leyenda" style="background:#d6e2d9"></i> Libre · clic en una planta para quitarla</span>
+        </div>
+        <div style="text-align:center;margin-top:14px"><button class="btn secundario" id="btn-limpiar">Limpiar huerto</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= VISTA 6: NUTRICIÓN ======================= -->
+  <section id="vista-nutricion" class="vista" hidden style="--acento:var(--amarillo)">
+    <div class="seccion-titulo"><span class="punto"></span><h2>Nutrición y salud</h2><span class="sub">Compara hasta 3 hortalizas</span></div>
+    <p style="max-width:78ch;color:#42523f">Cada hortaliza aporta nutrientes distintos. Selecciona hasta <strong>3</strong> y observa cómo sus polígonos se complementan: esa es la razón por la que un huerto <strong>diverso</strong> alimenta mejor que uno con una sola planta.</p>
+    <div class="nutri-layout">
+      <div class="marco-svg" style="padding:10px">
+        <svg id="radar" viewBox="0 0 380 380" role="img" aria-label="Gráfico de radar de nutrientes"></svg>
+      </div>
+      <div>
+        <div class="selector-nutri" id="selector-nutri" aria-label="Selección de hortalizas para comparar"></div>
+        <div class="aviso-nutri" id="aviso-nutri" role="status">Escala de 0 a 5. Selecciona al menos una hortaliza.</div>
+      </div>
+    </div>
+    <div class="leyenda-radar" id="leyenda-radar"></div>
+  </section>
+
+</main>
+
+<!-- ======================= DRAWER ECOSISTEMA ======================= -->
+<aside id="drawer" class="drawer" role="dialog" aria-modal="false" aria-labelledby="drawer-titulo" aria-hidden="true" inert>
+  <button class="cerrar-x" data-cerrar-drawer aria-label="Cerrar panel">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" stroke="#333" stroke-width="2.4" stroke-linecap="round"/></svg>
+  </button>
+  <div class="nodo-preview" id="drawer-preview" aria-hidden="true"></div>
+  <h2 id="drawer-titulo"></h2>
+  <div id="drawer-cuerpo"></div>
+</aside>
+
+<!-- ======================= MODAL ======================= -->
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" hidden>
+  <div class="modal-fondo" data-cerrar-modal></div>
+  <div class="modal-caja">
+    <button class="cerrar-x" data-cerrar-modal aria-label="Cerrar ventana">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6 L18 18 M18 6 L6 18" stroke="#333" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <h2 id="modal-titulo"></h2>
+    <div id="modal-cuerpo"></div>
+  </div>
+</div>
+
+<!-- Fantasma para el arrastre táctil (fallback de puntero) -->
+<div id="ghost" aria-hidden="true"></div>
+<script>
+"use strict";
+/* =========================================================================
+   A. UTILIDADES BÁSICAS
+   ========================================================================= */
+const $  = (sel, ctx = document) => ctx.querySelector(sel);
+const $$ = (sel, ctx = document) => Array.prototype.slice.call(ctx.querySelectorAll(sel));
+/* Crea un nodo con texto seguro (evita innerHTML con datos) */
+function crear(tag, texto, clase){
+  const n = document.createElement(tag);
+  if(texto !== undefined && texto !== null) n.textContent = texto;
+  if(clase) n.className = clase;
+  return n;
+}
+const SVGNS = "http://www.w3.org/2000/svg";
+/* Crea un elemento SVG con atributos */
+function svgEl(tag, attrs){
+  const n = document.createElementNS(SVGNS, tag);
+  if(attrs) for(const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+/* Inserta markup SVG de confianza (iconos definidos localmente en este archivo) */
+function ponerSVG(contenedor, markup){ contenedor.innerHTML = markup; }
+
+/* =========================================================================
+   B. DATOS AUTÓNOMOS (offline)
+   B.1 Iconos SVG inline por hortaliza
+   ========================================================================= */
+const ICONOS = {
+  zanahoria:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 12 L45 26 L32 58 L19 26 Z" fill="#E67E22"/><path d="M32 12 L45 26 L37 24 Z" fill="#b35f0e"/><path d="M32 16 C29 8 23 5 17 5 C20 13 25 17 32 18 Z" fill="#27AE60"/><path d="M32 16 C35 8 41 5 47 5 C44 13 39 17 32 18 Z" fill="#2ECC71"/></svg>',
+  remolacha:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="41" r="16" fill="#8E44AD"/><path d="M32 25 C30 15 22 9 15 7 C18 17 24 23 32 27 Z" fill="#27AE60"/><path d="M32 25 C34 15 42 9 49 7 C46 17 40 23 32 27 Z" fill="#2ECC71"/><circle cx="26" cy="44" r="2" fill="#6C3483"/><circle cx="37" cy="48" r="2" fill="#6C3483"/></svg>',
+  papa:'<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="24" cy="30" rx="14" ry="11" fill="#C8A165"/><ellipse cx="42" cy="39" rx="13" ry="10" fill="#B8935A"/><circle cx="19" cy="28" r="1.7" fill="#8a6d3b"/><circle cx="28" cy="34" r="1.7" fill="#8a6d3b"/><circle cx="44" cy="40" r="1.7" fill="#8a6d3b"/><circle cx="38" cy="35" r="1.7" fill="#8a6d3b"/></svg>',
+  cebolla:'<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="18" ry="15" fill="#D9A066"/><path d="M32 27 C28 19 28 11 32 4 C36 11 36 19 32 27 Z" fill="#27AE60"/><path d="M32 27 C26 21 19 19 12 19 C17 25 24 28 32 29 Z" fill="#2ECC71"/><path d="M32 27 C38 21 45 19 52 19 C47 25 40 28 32 29 Z" fill="#2ECC71"/><path d="M20 42 Q32 32 44 42" stroke="#a9662b" fill="none" stroke-width="1.6"/></svg>',
+  ajo:'<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="32" cy="42" rx="17" ry="14" fill="#F2EBDC"/><path d="M32 28 C29 21 29 13 32 7 C35 13 35 21 32 28 Z" fill="#e2d5bd"/><path d="M32 42 Q22 38 18 31 M32 42 Q42 38 46 31 M32 42 L32 29" stroke="#c9bca1" fill="none" stroke-width="1.6"/></svg>',
+  lechuga:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="34" r="21" fill="#2ECC71"/><circle cx="24" cy="28" r="12" fill="#7BE495"/><circle cx="41" cy="30" r="12" fill="#27AE60"/><circle cx="32" cy="42" r="13" fill="#4fd07f"/></svg>',
+  acelga:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 30 C19 30 11 20 11 7 C24 9 32 18 32 30 Z" fill="#2ECC71"/><path d="M32 30 C45 30 53 20 53 7 C40 9 32 18 32 30 Z" fill="#27AE60"/><path d="M32 30 L32 58" stroke="#F5F0E1" stroke-width="6" stroke-linecap="round"/></svg>',
+  espinaca:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M30 42 C18 42 10 32 10 16 C25 18 30 29 30 42 Z" fill="#27AE60"/><path d="M34 42 C46 42 54 32 54 16 C39 18 34 29 34 42 Z" fill="#2ECC71"/><path d="M32 45 L32 58" stroke="#1e8449" stroke-width="3" stroke-linecap="round"/></svg>',
+  tomate:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="39" r="19" fill="#E74C3C"/><circle cx="25" cy="33" r="5" fill="#ff9d92" opacity=".55"/><path d="M32 21 L24 15 L32 18 L40 15 Z" fill="#27AE60"/><path d="M22 24 L32 21 L42 24 L36 26 L32 23 L28 26 Z" fill="#2ECC71"/></svg>',
+  pimiento:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M22 27 C15 31 15 49 24 55 C28 58 36 58 40 55 C49 49 49 31 42 27 Z" fill="#E74C3C"/><path d="M32 27 L32 18" stroke="#27AE60" stroke-width="4" stroke-linecap="round"/><path d="M32 20 C28 14 22 13 17 14 C22 19 26 21 32 21 Z" fill="#2ECC71"/></svg>',
+  pepino:'<svg viewBox="0 0 64 64" aria-hidden="true"><g transform="rotate(15 32 34)"><rect x="24" y="9" width="16" height="48" rx="8" fill="#27AE60"/><circle cx="30" cy="24" r="1.6" fill="#1e8449"/><circle cx="36" cy="33" r="1.6" fill="#1e8449"/><circle cx="30" cy="42" r="1.6" fill="#1e8449"/></g></svg>',
+  apio:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="25" y="25" width="15" height="32" rx="6" fill="#7BE495"/><path d="M32 25 C28 17 22 13 17 13 C21 21 26 25 32 27 Z" fill="#2ECC71"/><path d="M32 25 C36 17 42 13 47 13 C43 21 38 25 32 27 Z" fill="#27AE60"/><path d="M32 25 L32 11" stroke="#27AE60" stroke-width="2"/><path d="M29 32 v20 M35 32 v20" stroke="#a8e6bd" stroke-width="1.4"/></svg>',
+  brocoli:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="23" cy="27" r="11" fill="#27AE60"/><circle cx="41" cy="27" r="11" fill="#2ECC71"/><circle cx="32" cy="18" r="12" fill="#2ECC71"/><circle cx="32" cy="31" r="11" fill="#1e8449"/><rect x="28" y="38" width="8" height="18" rx="3" fill="#7BE495"/></svg>',
+  coliflor:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="23" cy="29" r="12" fill="#EDE7D5"/><circle cx="41" cy="29" r="12" fill="#F5F0E1"/><circle cx="32" cy="20" r="13" fill="#FBF7EC"/><circle cx="32" cy="35" r="11" fill="#EDE7D5"/><rect x="28" y="42" width="8" height="15" rx="3" fill="#7BE495"/></svg>',
+  arveja:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M13 22 C26 10 45 15 51 31 C56 44 41 55 27 50 C16 46 9 33 13 22 Z" fill="#2ECC71"/><circle cx="26" cy="31" r="4.5" fill="#7BE495"/><circle cx="35" cy="35" r="4.5" fill="#7BE495"/><circle cx="43" cy="33" r="4.5" fill="#7BE495"/></svg>',
+  frijol:'<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="24" cy="28" rx="10" ry="14" fill="#8E5A3C" transform="rotate(-20 24 28)"/><ellipse cx="41" cy="39" rx="10" ry="14" fill="#A96B45" transform="rotate(15 41 39)"/><path d="M18 24 q6 4 12 0" stroke="#6b452e" fill="none" stroke-width="1.6"/></svg>',
+  albahaca:'<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 52 L32 24" stroke="#1e8449" stroke-width="3" stroke-linecap="round"/><path d="M32 36 C20 36 13 28 13 16 C26 16 32 25 32 36 Z" fill="#2ECC71"/><path d="M32 36 C44 36 51 28 51 16 C38 16 32 25 32 36 Z" fill="#27AE60"/><path d="M23 21 L32 32 M41 21 L32 32" stroke="#7BE495" stroke-width="1.5"/></svg>',
+  sol:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6" fill="#F1C40F"/><g stroke="#F1C40F" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="3.5"/><line x1="12" y1="20.5" x2="12" y2="23"/><line x1="1" y1="12" x2="3.5" y2="12"/><line x1="20.5" y1="12" x2="23" y2="12"/><line x1="4.2" y1="4.2" x2="6" y2="6"/><line x1="18" y1="18" x2="19.8" y2="19.8"/><line x1="19.8" y1="4.2" x2="18" y2="6"/><line x1="6" y1="18" x2="4.2" y2="19.8"/></g></svg>',
+  sombra:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="12" r="6" fill="#F1C40F"/><path d="M13 6 a7 7 0 0 1 0 12 a7 7 0 0 0 0 -12 Z" fill="#bdc3c7"/></svg>',
+  agua:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 C17 10 19 13 19 16 a7 7 0 0 1 -14 0 C5 13 7 10 12 3 Z" fill="#3498DB"/></svg>',
+  check:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#27AE60"/><path d="M6.5 12.5 L10.5 16 L17.5 8.5" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  cruz:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#E74C3C"/><path d="M8 8 L16 16 M16 8 L8 16" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>',
+  boost:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 L4 14 h6 l-1 8 L20 10 h-6 Z" fill="#7a5c00"/></svg>',
+  alerta:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 L22 20 H2 Z" fill="#E74C3C"/><path d="M12 9 v5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.2" fill="#fff"/></svg>'
+};
+/* B.2 Hortalizas: 17 cultivos (9 clases incluyendo la aromática compañera).
+   Cada ficha tiene nutrientes (escala 0-5) y textos básico/experto. */
+const HORTALIZAS = [
+  /* --- RAÍZ --- */
+  { id:"zanahoria", nombre:"Zanahoria", tipo:"raíz", dificultad:"fácil", sol:"pleno", agua:"medio", color:"#E67E22", icono:ICONOS.zanahoria,
+    siembra:{distancia:8, profundidad:1, trasplante:false},
+    nutrientes:{vitA:5, vitC:2, hierro:1, calcio:2, fibra:3},
+    companeras:["cebolla","ajo","lechuga","tomate","arveja","remolacha"], enemigas:["apio"],
+    basico:"Le encanta el sol y un suelo suelto y sin piedras. Se siembra directo y se cosecha a los 2-3 meses.",
+    experto:"Familia Apiaceae. Necesita suelos franco-arenosos, profundos y sin costras para evitar raíces bifurcadas. Siembra directa y raleo a 8 cm. El exceso de nitrógeno produce raíces fibrosas." },
+  { id:"remolacha", nombre:"Remolacha", tipo:"raíz", dificultad:"fácil", sol:"pleno", agua:"medio", color:"#8E44AD", icono:ICONOS.remolacha,
+    siembra:{distancia:10, profundidad:2, trasplante:false},
+    nutrientes:{vitA:1, vitC:2, hierro:3, calcio:1, fibra:3},
+    companeras:["cebolla","ajo","lechuga","acelga","coliflor"], enemigas:["frijol"],
+    basico:"De raíz colorada y dulce. Necesita tierra fina y riego constante para no volverse dura.",
+    experto:"Quenopodiácea. Tolera pH 6,0-7,5 y es sensible a la carencia de boro (corazón negro). El riego regular evita anillos leñosos. Aclareo a 10 cm; buena fuente de hierro y fibra." },
+  /* --- TUBÉRCULO --- */
+  { id:"papa", nombre:"Papa", tipo:"tubérculo", dificultad:"media", sol:"pleno", agua:"alto", color:"#C8A165", icono:ICONOS.papa,
+    siembra:{distancia:30, profundidad:10, trasplante:false},
+    nutrientes:{vitA:0, vitC:3, hierro:2, calcio:1, fibra:3},
+    companeras:["arveja","frijol","espinaca","ajo"], enemigas:["tomate","pepino"],
+    basico:"Se siembra con papa-semilla en surcos y se aporca. Ocupa bastante espacio.",
+    experto:"Solanácea. Prefiere pH 5,0-6,0 para prevenir la sarna común. Óptimo 15-20 °C; el tubérculo se detiene sobre 25 °C. Alta demanda de potasio. Rotación obligada: no repetir con tomate por tizón (Phytophthora)." },
+  /* --- BULBO --- */
+  { id:"cebolla", nombre:"Cebolla", tipo:"bulbo", dificultad:"fácil", sol:"pleno", agua:"bajo", color:"#D9A066", icono:ICONOS.cebolla,
+    siembra:{distancia:10, profundidad:1, trasplante:true},
+    nutrientes:{vitA:1, vitC:2, hierro:1, calcio:2, fibra:2},
+    companeras:["zanahoria","remolacha","lechuga","tomate","pepino"], enemigas:["arveja","frijol"],
+    basico:"Se puede trasplantar de semillero. Su aroma aleja algunas plagas de sus vecinas.",
+    experto:"Amarilidácea. Fotoperiodo largo para bulbificar. Repica a 10 cm y reduce el riego al final para el curado. Sus compuestos azufrados repelen plagas; incompatible con leguminosas porque inhibe la fijación simbiótica." },
+  { id:"ajo", nombre:"Ajo", tipo:"bulbo", dificultad:"fácil", sol:"pleno", agua:"bajo", color:"#F2EBDC", icono:ICONOS.ajo,
+    siembra:{distancia:10, profundidad:3, trasplante:false},
+    nutrientes:{vitA:1, vitC:2, hierro:1, calcio:2, fibra:2},
+    companeras:["zanahoria","tomate","lechuga","papa"], enemigas:["arveja","frijol"],
+    basico:"Se planta el diente y casi no necesita cuidados. Es un gran protector del huerto.",
+    experto:"Amarilidácea de siembra otoñal. Requiere vernalización para dividir bulbos y suelo bien drenado contra la podredumbre basal. Alelopático: sus sulfuros reducen hongos y nemátodos; evitar junto a leguminosas." },
+  /* --- HOJA --- */
+  { id:"lechuga", nombre:"Lechuga", tipo:"hoja", dificultad:"fácil", sol:"semisombra", agua:"alto", color:"#7BE495", icono:ICONOS.lechuga,
+    siembra:{distancia:25, profundidad:1, trasplante:true},
+    nutrientes:{vitA:3, vitC:2, hierro:2, calcio:2, fibra:3},
+    companeras:["zanahoria","remolacha","cebolla","ajo","pepino","brócoli","coliflor"], enemigas:[],
+    basico:"Crece rápido y casi todo el año. Mejor en semisombra si hace mucho calor.",
+    experto:"Asterácea. Óptimo 15-20 °C; la espigazón se dispara sobre 25 °C. Trasplante a 25 cm. Alta demanda de agua y nitrógeno; sensible a mildiu y babosas. Ideal para siembra escalonada." },
+  { id:"acelga", nombre:"Acelga", tipo:"hoja", dificultad:"fácil", sol:"pleno", agua:"medio", color:"#2ECC71", icono:ICONOS.acelga,
+    siembra:{distancia:30, profundidad:2, trasplante:false},
+    nutrientes:{vitA:4, vitC:3, hierro:3, calcio:3, fibra:2},
+    companeras:["remolacha","cebolla","lechuga","coliflor"], enemigas:[],
+    basico:"Muy resistente: das cortes y vuelve a crecer. Perfecta para comenzar.",
+    experto:"Quenopodiácea bienal de corte múltiple. Siembra directa o trasplante a 30 cm. Tolera suelos algo salinos y pH amplio. Alta producción de biomasa; aporta hierro y calcio." },
+  { id:"espinaca", nombre:"Espinaca", tipo:"hoja", dificultad:"media", sol:"semisombra", agua:"alto", color:"#1e8449", icono:ICONOS.espinaca,
+    siembra:{distancia:20, profundidad:2, trasplante:false},
+    nutrientes:{vitA:5, vitC:2, hierro:4, calcio:3, fibra:2},
+    companeras:["papa","frijol","arveja","tomate","brócoli"], enemigas:[],
+    basico:"De hojas verdes oscuras, muy nutritiva. Prefiere el fresco.",
+    experto:"Quenopodiácea. Óptimo 15-18 °C; sobre 24 °C espiga y pierde calidad. Suelo húmedo y rico en materia orgánica. Alta en hierro no hemo y oxalatos: conviene acompañarla con vitamina C para absorber mejor el hierro." },
+  /* --- FRUTA --- */
+  { id:"tomate", nombre:"Tomate", tipo:"fruta", dificultad:"media", sol:"pleno", agua:"alto", color:"#E74C3C", icono:ICONOS.tomate,
+    siembra:{distancia:60, profundidad:1, trasplante:true},
+    nutrientes:{vitA:3, vitC:4, hierro:2, calcio:1, fibra:2},
+    companeras:["albahaca","zanahoria","cebolla","ajo","lechuga","espinaca","arveja"], enemigas:["papa","pepino","brócoli","coliflor"],
+    basico:"El rey del huerto. Necesita tutor y mucho sol. La albahaca a su lado lo protege.",
+    experto:"Solanácea. Trasplante a 60 cm con tutorado. Riego regular y acolchado para evitar el rajado y la podredumbre apical (calcio). La albahaca mejora sabor y repelencia; evitar papa por tizón y crucíferas por competencia." },
+  { id:"pimiento", nombre:"Pimiento", tipo:"fruta", dificultad:"media", sol:"pleno", agua:"medio", color:"#E74C3C", icono:ICONOS.pimiento,
+    siembra:{distancia:40, profundidad:1, trasplante:true},
+    nutrientes:{vitA:3, vitC:5, hierro:1, calcio:1, fibra:2},
+    companeras:["albahaca","cebolla","zanahoria","lechuga","tomate"], enemigas:["frijol"],
+    basico:"Como el tomate, quiere sol y trasplante. Sus frutos son mejores cuando maduran.",
+    experto:"Solanácea. Óptimo 20-25 °C, sensible al frío. Trasplante a 40 cm. Alta demanda de calcio y magnesio. El pimiento rojo maduro multiplica sus carotenoides y vitamina C." },
+  { id:"pepino", nombre:"Pepino", tipo:"fruta", dificultad:"media", sol:"pleno", agua:"alto", color:"#27AE60", icono:ICONOS.pepino,
+    siembra:{distancia:40, profundidad:2, trasplante:false},
+    nutrientes:{vitA:1, vitC:2, hierro:1, calcio:1, fibra:2},
+    companeras:["lechuga","cebolla","ajo","arveja","frijol"], enemigas:["tomate","papa"],
+    basico:"Trepador y muy refrescante. Necesita riego frecuente.",
+    experto:"Cucurbitácea. Siembra directa a 40 cm en tutor vertical. Riego abundante y constante; sensible a oídio y a la carencia de magnesio. Regar al pie, no sobre las hojas." },
+  /* --- TALLO --- */
+  { id:"apio", nombre:"Apio", tipo:"tallo", dificultad:"media", sol:"semisombra", agua:"alto", color:"#7BE495", icono:ICONOS.apio,
+    siembra:{distancia:25, profundidad:1, trasplante:true},
+    nutrientes:{vitA:1, vitC:2, hierro:1, calcio:2, fibra:3},
+    companeras:["lechuga","cebolla","tomate","frijol"], enemigas:["zanahoria"],
+    basico:"Crujiente y aromático. Necesita mucha agua; nunca lo dejes secar.",
+    experto:"Apiácea de humedad alta. Trasplante a 25 cm. Muy exigente en agua y boro. No asociar con zanahoria: comparten plagas de Apiáceas (mosca de la zanahoria y septoriosis)." },
+  /* --- FLOR --- */
+  { id:"brócoli", nombre:"Brócoli", tipo:"flor", dificultad:"media", sol:"pleno", agua:"medio", color:"#27AE60", icono:ICONOS.brocoli,
+    siembra:{distancia:45, profundidad:1, trasplante:true},
+    nutrientes:{vitA:4, vitC:5, hierro:3, calcio:3, fibra:4},
+    companeras:["lechuga","espinaca","remolacha","cebolla"], enemigas:["tomate"],
+    basico:"Se cosecha la flor antes de que abra. Le gusta el clima fresco.",
+    experto:"Crucífera (Brassicaceae). Trasplante a 45 cm. Óptimo 15-20 °C. Gran extractora de nutrientes; requiere boro. No asociar con tomate por competencia y alelopatía." },
+  { id:"coliflor", nombre:"Coliflor", tipo:"flor", dificultad:"media", sol:"pleno", agua:"medio", color:"#F5F0E1", icono:ICONOS.coliflor,
+    siembra:{distancia:50, profundidad:1, trasplante:true},
+    nutrientes:{vitA:1, vitC:5, hierro:2, calcio:2, fibra:3},
+    companeras:["lechuga","acelga","remolacha","apio"], enemigas:["tomate"],
+    basico:"Pariente del brócoli. Conviene cubrir la flor para que quede blanca.",
+    experto:"Crucífera. Trasplante a 50 cm. Requiere boro y molibdeno; su carencia produce tallos huecos y hojas rizadas. El blanqueo (atar las hojas) protege la pella." },
+  /* --- LEGUMINOSA --- */
+  { id:"arveja", nombre:"Arveja", tipo:"leguminosa", dificultad:"fácil", sol:"pleno", agua:"medio", color:"#2ECC71", icono:ICONOS.arveja,
+    siembra:{distancia:15, profundidad:3, trasplante:false},
+    nutrientes:{vitA:2, vitC:3, hierro:3, calcio:2, fibra:4},
+    companeras:["zanahoria","papa","pepino","espinaca","lechuga"], enemigas:["cebolla","ajo"],
+    basico:"Trepa y enriquece la tierra: sus raíces devuelven nitrógeno. Le caen mal la cebolla y el ajo.",
+    experto:"Fabácea. Siembra directa a 15 cm con tutor. Fija nitrógeno atmosférico por simbiosis con Rhizobium. Las aliáceas inhiben esa simbiosis; de ahí su incompatibilidad. Sensible a oídio en floración." },
+  { id:"frijol", nombre:"Frijol", tipo:"leguminosa", dificultad:"fácil", sol:"pleno", agua:"medio", color:"#A96B45", icono:ICONOS.frijol,
+    siembra:{distancia:30, profundidad:3, trasplante:false},
+    nutrientes:{vitA:1, vitC:2, hierro:4, calcio:3, fibra:4},
+    companeras:["papa","pepino","espinaca","lechuga","apio"], enemigas:["cebolla","ajo","remolacha","pimiento"],
+    basico:"También fija nitrógeno. Hay variedades de mata y de guía.",
+    experto:"Fabácea. Siembra directa a 30 cm. Fija nitrógeno con Rhizobium; incompatible con aliáceas porque inhiben la simbiosis. Conviene inocular en suelos nuevos. Aporta hierro y fibra en alta proporción." },
+  /* --- AROMÁTICA (compañera clave del tomate) --- */
+  { id:"albahaca", nombre:"Albahaca", tipo:"aromática", dificultad:"fácil", sol:"pleno", agua:"medio", color:"#2ECC71", icono:ICONOS.albahaca,
+    siembra:{distancia:25, profundidad:1, trasplante:true},
+    nutrientes:{vitA:3, vitC:2, hierro:1, calcio:2, fibra:1},
+    companeras:["tomate","pimiento","pepino","lechuga"], enemigas:[],
+    basico:"Aromática ideal junto al tomate: mejora su sabor y ahuyenta insectos.",
+    experto:"Lamiaceae. Trasplante a 25 cm; pinzar las flores para prolongar la producción de hojas. Sus aceites esenciales (linalol, eugenol) tienen efecto repelente y favorecen la polinización del tomate." }
+];
+/* B.3 Horizontes del suelo (barra apilada + modal) */
+const CAPAS_SUELO = [
+  { id:"O", letra:"O", nombre:"Horizonte O · Capa orgánica", color:"#3e2f1c", altura:52,
+    resumen:"Hojarasca y restos vivos en descomposición.",
+    ph:"5,5 – 6,5 (ácido por la materia orgánica)", textura:"Fibrosa, suelta, esponjosa",
+    macro:"Materia orgánica, carbono, nitrógeno, fósforo",
+    micro:"Hierro, zinc y manganeso quelatados por el humus",
+    vitaminas:"Vitamina A y vitaminas del complejo B (que luego pasan a los cultivos)",
+    basico:"Es la capa de arriba: hojas secas, restos y bichitos que los convierten en compost. Aquí nace la vida del suelo.",
+    experto:"Horizonte orgánico (O). Compuesto por hojarasca en distintos grados de descomposición (L, F y H). Alberga la macro y microfauna descomponedora. Alta capacidad de intercambio catiónico; regula humedad y temperatura. pH ligeramente ácido por ácidos húmicos y fúlvicos." },
+  { id:"A", letra:"A", nombre:"Horizonte A · Suelo superficial", color:"#6b4a25", altura:96,
+    resumen:"Tierra fértil donde crecen la mayoría de raíces.",
+    ph:"6,0 – 7,0 (casi neutro)", textura:"Franca: mezcla de arena, limo y arcilla",
+    macro:"Nitrógeno, fósforo, potasio, calcio, magnesio",
+    micro:"Hierro, zinc, cobre y boro; vitaminas A, C y complejo B en la materia orgánica",
+    vitaminas:"Vitamina A, C y complejo B",
+    basico:"Es la capa más fértil: aquí viven las raíces y los nutrientes que alimentan tus plantas. ¡Cuídala con compost!",
+    experto:"Horizonte A (zona de eluviación). Contiene humus y es la principal zona radicular. La textura franca es ideal para la mayoría de hortalizas. El hierro y el zinc presentes son esenciales para la fotosíntesis; las vitaminas A, C y del complejo B se generan en los tejidos vegetales a partir de los nutrientes absorbidos aquí." },
+  { id:"B", letra:"B", nombre:"Horizonte B · Subsuelo", color:"#a9743f", altura:92,
+    resumen:"Acumulación de arcillas y minerales lavados.",
+    ph:"6,5 – 7,5", textura:"Arcillosa, más compacta y pesada",
+    macro:"Arcillas, óxidos de hierro, calcio y potasio acumulados",
+    micro:"Hierro, zinc y manganeso, muy retenidos",
+    vitaminas:"Sin vitaminas directas; es una reserva mineral",
+    basico:"Está debajo. Guarda minerales que se lavan desde arriba. Es duro de trabajar, pero importante como reserva.",
+    experto:"Horizonte B (zona de iluviación). Acumula arcillas, óxidos de hierro y aluminio, y carbonatos por lavado desde los horizontes superiores. Baja actividad biológica y menor porosidad; su textura arcillosa dificulta el drenaje y las raíces." },
+  { id:"C", letra:"C", nombre:"Horizonte C · Material parental", color:"#8d8d8d", altura:80,
+    resumen:"Roca fragmentada que da origen al suelo.",
+    ph:"7,0 – 8,5", textura:"Fragmentos de roca y grava",
+    macro:"Minerales primarios en meteorización, base del futuro suelo",
+    micro:"Hierro, zinc y otros oligoelementos liberados lentamente",
+    vitaminas:"No contiene vitaminas",
+    basico:"Es la base: piedras y roca partida. Con muchísimo tiempo se irá transformando en suelo.",
+    experto:"Horizonte C. Material parental parcialmente meteorizado, sin estructura pedogenética definida y con escasa actividad biológica. Es la reserva última de minerales; su composición condiciona la textura y el pH del suelo que se formará sobre él." }
+];
+
+/* B.4 Nodos y aristas del ecosistema (grafo SVG) */
+const NODOS_ECOSISTEMA = [
+  { id:"suelo", nombre:"Suelo", x:300, y:340, color:"#8a5a2b", icono:'<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="24" width="52" height="34" rx="8" fill="#8a5a2b"/><rect x="6" y="24" width="52" height="10" rx="5" fill="#6b4a25"/><path d="M22 18 C22 10 30 6 32 6 C34 6 42 10 42 18 C42 22 36 24 32 24 C28 24 22 22 22 18 Z" fill="#2ECC71"/></svg>',
+    basico:"Es el hogar de las raíces. Aporta agua, aire y minerales, y guarda los nutrientes que las plantas necesitan.",
+    experto:"Soporte físico y químico del sistema radicular. Su estructura (agregados), porosidad y capacidad de intercambio catiónico determinan la disponibilidad de agua y de macro y micronutrientes. La materia orgánica mejora su fertilidad y su actividad microbiana." },
+  { id:"agua", nombre:"Agua", x:110, y:220, color:"#3498DB", icono:ICONOS.agua,
+    basico:"Todo ser vivo la necesita. Con riego suficiente y constante las hortalizas crecen sanas; el exceso pudre las raíces.",
+    experto:"El agua transporta nutrientes y regula la temperatura. La disponibilidad hídrica depende de la textura y de la capacidad de campo del suelo. El riego debe ajustarse a cada cultivo: las hortalizas de hoja demandan más humedad que las de raíz o los bulbos." },
+  { id:"sol", nombre:"Sol", x:490, y:90, color:"#F1C40F", icono:ICONOS.sol,
+    basico:"Da la energía para que las plantas fabriquen su alimento. Casi todas piden entre 6 y 8 horas de luz al día.",
+    experto:"Motor de la fotosíntesis. La radiación fotosintéticamente activa (PAR) determina el crecimiento y la acumulación de azúcares y vitaminas. Cultivos de fruto como tomate y pimiento requieren pleno sol; lechuga y espinaca toleran semisombra." },
+  { id:"hoja", nombre:"Hortalizas de hoja", x:140, y:120, color:"#2ECC71", icono:ICONOS.lechuga,
+    basico:"Lechuga, acelga y espinaca: crecen rápido, piden bastante agua y agradecen algo de sombra si hace mucho calor.",
+    experto:"Grupo de ciclo corto y alta relación superficie/volumen. Sensibles a la espigazón por calor y a la deshidratación. Responden muy bien al nitrógeno y a la materia orgánica; aportan vitaminas A, C y folatos." },
+  { id:"raiz", nombre:"Hortalizas de raíz", x:430, y:330, color:"#E67E22", icono:ICONOS.zanahoria,
+    basico:"Zanahoria, remolacha o papa: necesitan un suelo suelto y profundo para que su raíz crezca derecha y grande.",
+    experto:"Cultivos de órgano de reserva subterráneo. Exigen suelos profundos, sin piedras ni costras, y buen drenaje. El exceso de nitrógeno favorece el follaje en detrimento de la raíz. Aportan hidratos de carbono, hierro y fibra." },
+  { id:"companeras", nombre:"Plantas compañeras", x:300, y:140, color:"#27AE60", icono:ICONOS.albahaca,
+    basico:"Asociar bien las plantas ayuda: unas ahuyentan insectos y otras enriquecen la tierra. Por ejemplo, albahaca con tomate.",
+    experto:"Asociación e intercultivo (companion planting). Basado en alelopatía, repelencia de plagas, atracción de polinizadores y complementariedad de nichos. Las leguminosas fijan nitrógeno; las aromáticas segregan compuestos volátiles biocidas." },
+  { id:"nutrientes", nombre:"Nutrientes", x:500, y:240, color:"#8E44AD", icono:'<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="20" fill="#8E44AD"/><circle cx="24" cy="26" r="5" fill="#c39bd3"/><circle cx="40" cy="38" r="7" fill="#c39bd3"/></svg>',
+    basico:"Son como la comida de las plantas: nitrógeno, fósforo, potasio y minerales como el hierro y el zinc.",
+    experto:"Macronutrientes (N, P, K, Ca, Mg, S) y micronutrientes (Fe, Zn, Mn, Cu, B, Mo). Su disponibilidad depende del pH y de la materia orgánica. Un suelo equilibrado produce hortalizas más ricas en vitaminas A, C y del complejo B." }
+];
+/* Aristas: pares de nodos conectados */
+const ARISTAS_ECOSISTEMA = [
+  ["suelo","hoja"],["suelo","raiz"],["suelo","nutrientes"],["suelo","companeras"],
+  ["agua","suelo"],["agua","hoja"],["agua","raiz"],["agua","nutrientes"],
+  ["sol","hoja"],["sol","raiz"],["sol","companeras"],
+  ["companeras","hoja"],["companeras","raiz"],["companeras","agua"],
+  ["nutrientes","hoja"],["nutrientes","raiz"]
+];
+/* =========================================================================
+   C. ESTADO GLOBAL Y UTILIDADES DE DATOS
+   ========================================================================= */
+const estado = {
+  vista:"inicio",
+  modo:"novato",
+  huerto:Array.from({length:6}, () => Array(6).fill(null)), // matriz 6x6 de ids o null
+  nutri:[],            // ids seleccionados en el radar (máx. 3)
+  nodo:null,           // nodo activo del grafo
+  dragId:null,         // planta que se está arrastrando
+  plantaSel:null       // planta seleccionada para el modo táctil/teclado
+};
+const porId = id => HORTALIZAS.find(h => h.id === id);
+const COLORES_NUTRI = ["#E67E22","#3498DB","#2ECC71"];
+
+/* ¿a es enemiga de b? (comprobación en ambos sentidos) */
+function sonEnemigas(a, b){
+  const A = porId(a), B = porId(b);
+  if(!A || !B) return false;
+  return A.enemigas.indexOf(b) !== -1 || B.enemigas.indexOf(a) !== -1;
+}
+/* ¿a es compañera de b? (comprobación en ambos sentidos) */
+function sonCompaneras(a, b){
+  const A = porId(a), B = porId(b);
+  if(!A || !B) return false;
+  return A.companeras.indexOf(b) !== -1 || B.companeras.indexOf(a) !== -1;
+}
+
+/* =========================================================================
+   D. NAVEGACIÓN SPA
+   ========================================================================= */
+function navegar(v){
+  cerrarDrawer();
+  if(!$("#modal").hidden) cerrarModal();
+  estado.vista = v;
+  $$(".vista").forEach(s => { s.hidden = (s.id !== "vista-" + v); });
+  const activo = (v === "detalle") ? "hortalizas" : v;
+  $$(".nav-btn").forEach(b => {
+    const on = b.dataset.vista === activo;
+    b.classList.toggle("activo", on);
+    if(on) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
+  });
+  if(v === "nutricion") renderRadar();
+  const reduce = window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+  window.scrollTo({top:0, behavior: reduce ? "auto" : "smooth"});
+}
+/* Botones con data-vista (cabecera y hero) */
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-vista]");
+  if(b) navegar(b.dataset.vista);
+});
+
+/* =========================================================================
+   E. MODO NOVATO / EXPERTO (toggle persistente)
+   ========================================================================= */
+function aplicarModo(modo){
+  estado.modo = modo;
+  const experto = modo === "experto";
+  document.body.classList.toggle("modo-experto", experto);
+  const btn = $("#btn-modo");
+  btn.setAttribute("aria-checked", experto ? "true" : "false");
+  btn.setAttribute("aria-label", experto ? "Desactivar modo experto" : "Activar modo experto");
+  $("#modo-texto").textContent = experto ? "Experto" : "Novato";
+  const btnDetalle = document.getElementById("btn-detalle-tecnico");
+  if(btnDetalle) btnDetalle.hidden = experto;
+  try { localStorage.setItem("huerta.modo", modo); } catch(err) { /* almacenamiento no disponible */ }
+}
+function cargarModo(){
+  let modo = "novato";
+  try { modo = localStorage.getItem("huerta.modo") || "novato"; } catch(err) {}
+  aplicarModo(modo === "experto" ? "experto" : "novato");
+}
+$("#btn-modo").addEventListener("click", () => {
+  aplicarModo(estado.modo === "experto" ? "novato" : "experto");
+});
+
+/* =========================================================================
+   F. VISTA ECOSISTEMA — GRAFO SVG
+   Lógica: se dibujan primero las aristas (con data-a/data-b) y luego los
+   nodos. Al seleccionar un nodo se añade .activa a las aristas conectadas
+   y .activo al nodo, y se abre el drawer con su ficha.
+   ========================================================================= */
+function renderGrafo(){
+  const svg = $("#grafo");
+  svg.textContent = ""; // limpiar
+  const pos = {};
+  NODOS_ECOSISTEMA.forEach(n => { pos[n.id] = n; });
+
+  // 1) Aristas
+  ARISTAS_ECOSISTEMA.forEach(([a,b]) => {
+    const na = pos[a], nb = pos[b];
+    if(!na || !nb) return;
+    const linea = svgEl("line", {
+      x1:na.x, y1:na.y, x2:nb.x, y2:nb.y,
+      class:"arista"
+    });
+    linea.dataset.a = a; linea.dataset.b = b;
+    svg.appendChild(linea);
+  });
+
+  // 2) Nodos (grupo con círculo + icono + etiqueta)
+  NODOS_ECOSISTEMA.forEach(n => {
+    const g = svgEl("g", { class:"nodo", tabindex:"0", role:"button", "aria-label":n.nombre });
+    g.dataset.id = n.id;
+    g.appendChild(svgEl("circle", { cx:n.x, cy:n.y, r:42, fill:"#fff", stroke:n.color, "stroke-width":3 }));
+    g.appendChild(svgEl("circle", { cx:n.x, cy:n.y, r:42, fill:n.color, opacity:0.12 }));
+
+    // Icono dentro del nodo mediante <image> con data URI SVG
+    const img = svgEl("image", {
+      x:n.x-19, y:n.y-33, width:38, height:38,
+      href:"data:image/svg+xml;utf8," + encodeURIComponent(n.icono)
+    });
+    g.appendChild(img);
+
+    const etiqueta = svgEl("text", { x:n.x, y:n.y+30 });
+    etiqueta.textContent = n.nombre;
+    g.appendChild(etiqueta);
+    svg.appendChild(g);
+  });
+
+  // 3) Interacción
+  function seleccionar(id){
+    estado.nodo = id;
+    $$("#grafo .arista").forEach(l => {
+      l.classList.toggle("activa", l.dataset.a === id || l.dataset.b === id);
+    });
+    $$("#grafo .nodo").forEach(n => n.classList.toggle("activo", n.dataset.id === id));
+    abrirDrawerNodo(id);
+  }
+  svg.addEventListener("click", e => {
+    const g = e.target.closest(".nodo");
+    if(g) seleccionar(g.dataset.id);
+  });
+  svg.addEventListener("keydown", e => {
+    const g = e.target.closest(".nodo");
+    if(g && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); seleccionar(g.dataset.id); }
+  });
+}
+
+/* Drawer lateral del ecosistema */
+let drawerTrigger = null;
+function abrirDrawerNodo(id){
+  const n = NODOS_ECOSISTEMA.find(x => x.id === id);
+  if(!n) return;
+  const drawer = $("#drawer");
+  if(!drawer.classList.contains("abierto")) drawerTrigger = document.activeElement;
+  ponerSVG($("#drawer-preview"), n.icono);
+  $("#drawer-titulo").textContent = n.nombre;
+
+  const cuerpo = $("#drawer-cuerpo");
+  cuerpo.textContent = "";
+  cuerpo.appendChild(crear("p", n.basico));
+  // Botón para revelar el contenido experto (visible siempre; en modo
+  // Experto el panel ya aparece por CSS)
+  const btn = crear("button","Ver más detalles","btn secundario");
+  btn.id = "btn-detalle-tecnico";
+  btn.setAttribute("aria-expanded","false");
+  if(estado.modo === "experto") btn.hidden = true;
+  const panel = crear("div","","panel-suelo experto-contenido");
+  const h = crear("h3","Detalle técnico");
+  const p = crear("p", n.experto);
+  panel.appendChild(h); panel.appendChild(p);
+  btn.addEventListener("click", () => {
+    panel.classList.toggle("abierto");
+    const abierto = panel.classList.contains("abierto");
+    btn.textContent = abierto ? "Ocultar detalles" : "Ver más detalles";
+    btn.setAttribute("aria-expanded", abierto ? "true" : "false");
+  });
+  cuerpo.appendChild(btn);
+  cuerpo.appendChild(panel);
+
+  drawer.inert = false;
+  drawer.removeAttribute("inert");
+  drawer.setAttribute("aria-modal","true");
+  drawer.classList.add("abierto");
+  drawer.setAttribute("aria-hidden","false");
+  const cerrarX = drawer.querySelector(".cerrar-x");
+  if(cerrarX) cerrarX.focus();
+}
+function cerrarDrawer(){
+  const drawer = $("#drawer");
+  if(!drawer.classList.contains("abierto")) return;
+  drawer.classList.remove("abierto");
+  drawer.setAttribute("aria-hidden","true");
+  drawer.setAttribute("aria-modal","false");
+  drawer.inert = true;
+  drawer.setAttribute("inert","");
+  estado.nodo = null;
+  $$("#grafo .arista").forEach(l => l.classList.remove("activa"));
+  $$("#grafo .nodo").forEach(n => n.classList.remove("activo"));
+  if(drawerTrigger && drawerTrigger.focus && document.contains(drawerTrigger)) drawerTrigger.focus();
+  drawerTrigger = null;
+}
+document.addEventListener("click", e => {
+  if(e.target.closest("[data-cerrar-drawer]")){ cerrarDrawer(); return; }
+  const drawer = $("#drawer");
+  if(!drawer.classList.contains("abierto")) return;
+  if(e.target.closest("#drawer") || e.target.closest("#grafo")) return;
+  cerrarDrawer();
+});
+
+/* =========================================================================
+   G. VISTA SUELO — BARRA APILADA SVG + LISTA + MODAL
+   ========================================================================= */
+function renderSuelo(){
+  const svg = $("#suelo");
+  svg.textContent = "";
+  let y = 10; // margen superior
+  CAPAS_SUELO.forEach(capa => {
+    const g = svgEl("g", { class:"capa", tabindex:"0", role:"listitem", "aria-label":capa.nombre });
+    g.dataset.id = capa.id;
+    g.appendChild(svgEl("rect", { x:40, y:y, width:320, height:capa.altura, rx:6, fill:capa.color }));
+    // Línea de profundidad
+    g.appendChild(svgEl("rect", { x:40, y:y, width:320, height:2, fill:"rgba(255,255,255,.25)" }));
+    const letra = svgEl("text", { x:62, y:y + capa.altura/2 + 7, class:"letra" });
+    letra.textContent = capa.letra;
+    g.appendChild(letra);
+    // Nombre que aparece al pasar el cursor (hover)
+    const nombre = svgEl("text", { x:300, y:y + capa.altura/2 + 5, class:"nombre-capa", "text-anchor":"end" });
+    nombre.textContent = capa.nombre.split("·")[0].trim();
+    g.appendChild(nombre);
+    svg.appendChild(g);
+    y += capa.altura + 2;
+  });
+  // Interacción hover/click
+  svg.addEventListener("click", e => {
+    const g = e.target.closest(".capa");
+    if(g) abrirModalSuelo(g.dataset.id);
+  });
+  svg.addEventListener("keydown", e => {
+    const g = e.target.closest(".capa");
+    if(g && (e.key === "Enter" || e.key === " ")){ e.preventDefault(); abrirModalSuelo(g.dataset.id); }
+  });
+
+  // Lista accesible equivalente
+  const lista = $("#lista-capas");
+  lista.textContent = "";
+  CAPAS_SUELO.forEach(capa => {
+    const btn = crear("button","", "capa-item");
+    btn.type = "button";
+    const color = crear("span","", "capa-color");
+    color.style.background = capa.color;
+    const txt = crear("span","");
+    txt.appendChild(crear("span", capa.nombre, "capa-item-titulo"));
+    txt.appendChild(crear("span", capa.resumen, "capa-item-resumen"));
+    btn.appendChild(color); btn.appendChild(txt);
+    btn.addEventListener("click", () => abrirModalSuelo(capa.id));
+    lista.appendChild(btn);
+  });
+}
+
+/* Ilustración SVG de perfil de suelo, resaltando la capa elegida */
+function ilustracionPerfil(idActiva){
+  let y = 40, alto = 46, filas = "";
+  // Cielo/plantas
+  filas += '<rect x="0" y="0" width="520" height="40" fill="#eaf7ff"/>' +
+           '<circle cx="460" cy="20" r="14" fill="#F1C40F"/>' +
+           '<g><rect x="90" y="14" width="6" height="26" fill="#1e8449"/><circle cx="93" cy="12" r="12" fill="#2ECC71"/></g>' +
+           '<g><rect x="200" y="18" width="6" height="22" fill="#1e8449"/><circle cx="203" cy="16" r="10" fill="#27AE60"/></g>';
+  CAPAS_SUELO.forEach(c => {
+    const activa = c.id === idActiva;
+    filas += '<rect x="20" y="'+y+'" width="480" height="'+alto+'" fill="'+c.color+'" opacity="'+(activa?1:0.45)+'"/>' +
+             '<text x="40" y="'+(y+alto/2+6)+'" fill="#fff" font-size="18" font-weight="800" font-family="Montserrat,sans-serif">'+c.letra+'</text>' +
+             '<text x="470" y="'+(y+alto/2+5)+'" fill="#fff" font-size="13" text-anchor="end" font-family="Nunito,sans-serif">'+c.nombre.split("·")[1].trim()+'</text>';
+    if(activa) filas += '<rect x="20" y="'+y+'" width="480" height="'+alto+'" fill="none" stroke="#F1C40F" stroke-width="4"/>';
+    y += alto + 4;
+  });
+  return '<svg viewBox="0 0 520 260" class="ilustracion-suelo" role="img" aria-label="Perfil del suelo">'+filas+'</svg>';
+}
+
+function abrirModalSuelo(id){
+  const c = CAPAS_SUELO.find(x => x.id === id);
+  if(!c) return;
+  const modal = $("#modal");
+  $("#modal-titulo").textContent = c.nombre;
+  const cuerpo = $("#modal-cuerpo");
+  cuerpo.textContent = "";
+  // Ilustración
+  const ilus = crear("div",""); ponerSVG(ilus, ilustracionPerfil(id));
+  cuerpo.appendChild(ilus);
+  // Resumen y bloques
+  cuerpo.appendChild(crear("p", c.resumen));
+  const datos = [
+    ["pH", c.ph], ["Textura", c.textura],
+    ["Macronutrientes", c.macro], ["Micronutrientes", c.micro],
+    ["Vitaminas", c.vitaminas]
+  ];
+  const tabla = crear("div","","detalle-grid");
+  datos.forEach(([k,v]) => {
+    const b = crear("div","","bloque");
+    b.appendChild(crear("h3",k));
+    b.appendChild(crear("p",v));
+    tabla.appendChild(b);
+  });
+  cuerpo.appendChild(tabla);
+  const basico = crear("div","","bloque");
+  basico.appendChild(crear("h3","Explicación sencilla"));
+  basico.appendChild(crear("p", c.basico));
+  const experto = crear("div","","bloque experto-contenido");
+  experto.appendChild(crear("h3","Detalle experto"));
+  experto.appendChild(crear("p", c.experto));
+  const grid2 = crear("div","","detalle-grid");
+  grid2.appendChild(basico); grid2.appendChild(experto);
+  cuerpo.appendChild(grid2);
+  abrirModal();
+}
+/* =========================================================================
+   H. MODAL GENÉRICO (Esc y clic fuera para cerrar)
+   ========================================================================= */
+let ultimoFoco = null;
+function abrirModal(){
+  const m = $("#modal");
+  ultimoFoco = document.activeElement;
+  m.hidden = false;
+  const cerrar = m.querySelector(".cerrar-x");
+  if(cerrar) cerrar.focus();
+}
+function cerrarModal(){
+  const m = $("#modal");
+  m.hidden = true;
+  if(ultimoFoco && ultimoFoco.focus) ultimoFoco.focus();
+}
+document.addEventListener("click", e => {
+  if(e.target.closest("[data-cerrar-modal]")) cerrarModal();
+});
+/* Cerrar con la tecla Esc (drawer y modal) */
+document.addEventListener("keydown", e => {
+  if(e.key !== "Escape") return;
+  if(!$("#modal").hidden) cerrarModal();
+  else if($("#drawer").classList.contains("abierto")) cerrarDrawer();
+});
+
+/* =========================================================================
+   I. VISTA HORTALIZAS — CATÁLOGO Y DETALLE
+   ========================================================================= */
+function estrellasDificultad(d){
+  const n = d === "fácil" ? 1 : d === "media" ? 2 : 3;
+  return "★".repeat(n) + "☆".repeat(3 - n);
+}
+function iconoSol(sol){
+  return sol === "pleno" ? ICONOS.sol : ICONOS.sombra;
+}
+function iconoAgua(nivel){
+  const gotas = nivel === "bajo" ? 1 : nivel === "medio" ? 2 : 3;
+  let out = '<g>';
+  for(let i=0;i<3;i++){
+    out += '<path d="M'+(4+i*8)+' 3 C'+(8+i*8)+' 8 '+(9+i*8)+' 10 '+(9+i*8)+' 11.5 a5 5 0 0 1 -10 0 C'+(3+i*8)+' 10 '+(4+i*8)+' 8 '+(4+i*8)+' 3 Z" fill="'+(i<gotas?"#3498DB":"#d6e2e8")+'"/>';
+  }
+  return '<svg viewBox="0 0 24 20" aria-hidden="true">'+out+'</svg>';
+}
+
+/* Elige texto blanco u oscuro según cuál ofrezca mayor contraste sobre el acento */
+function colorTextoAcento(hex){
+  const c = hex.replace("#","");
+  const rgb = [0,2,4].map(i => parseInt(c.substr(i,2),16) / 255);
+  const lin = v => v <= 0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055, 2.4);
+  const L = 0.2126*lin(rgb[0]) + 0.7152*lin(rgb[1]) + 0.0722*lin(rgb[2]);
+  const Ldark = 0.023; // luminancia aprox. de --tinta (#1f2d24)
+  const contrasteBlanco = 1.05 / (L + 0.05);
+  const contrasteOscuro = (L + 0.05) / (Ldark + 0.05);
+  return contrasteOscuro >= contrasteBlanco ? "var(--tinta)" : "#fff";
+}
+
+function renderCatalogo(){
+  const grid = $("#grid-hortalizas");
+  grid.textContent = "";
+  HORTALIZAS.forEach(h => {
+    const card = crear("button","","tarjeta-h");
+    card.type = "button";
+    card.style.setProperty("--acento", h.color);
+    card.style.setProperty("--acento-txt", colorTextoAcento(h.color));
+    card.setAttribute("aria-label", h.nombre + ", " + h.tipo + ", dificultad " + h.dificultad);
+
+    const ico = crear("span","","icono-planta"); ponerSVG(ico, h.icono);
+    card.appendChild(ico);
+    card.appendChild(crear("span", h.nombre, "t-nombre"));
+    card.appendChild(crear("span", h.tipo, "tipo-tag"));
+
+    const mini = crear("span","","fila-mini");
+    mini.appendChild(crear("span", estrellasDificultad(h.dificultad)));
+    const sol = crear("span",""); ponerSVG(sol, iconoSol(h.sol)); mini.appendChild(sol);
+    const agua = crear("span",""); ponerSVG(agua, iconoAgua(h.agua)); mini.appendChild(agua);
+    card.appendChild(mini);
+
+    card.addEventListener("click", () => abrirDetalle(h.id));
+    grid.appendChild(card);
+  });
+}
+
+/* Esquema SVG de siembra: distancia entre plantas + profundidad de siembra */
+function esquemaSiembra(h){
+  const d = Math.min(h.siembra.distancia * 1.8, 150);
+  const prof = Math.max(h.siembra.profundidad * 4, 8);
+  const tierraY = 70;
+  return '<svg viewBox="0 0 520 230" class="esquema" role="img" aria-label="Esquema de siembra de '+h.nombre+'">' +
+    // Panel superior: distancia entre plantas (vista de arriba)
+    '<rect x="10" y="20" width="500" height="80" rx="12" fill="#f1f7f2" stroke="#dfe8df"/>' +
+    '<text x="24" y="14" fill="#5b6b5f" font-size="12" font-family="Nunito,sans-serif">Vista superior · distancia entre plantas</text>' +
+    '<circle cx="80" cy="60" r="14" fill="'+h.color+'"/>' +
+    '<circle cx="'+(80+d)+'" cy="60" r="14" fill="'+h.color+'" opacity="0.7"/>' +
+    '<line x1="80" y1="34" x2="'+(80+d)+'" y2="34" stroke="#E67E22" stroke-width="2.5"/>' +
+    '<path d="M80 34 l8 -5 M80 34 l8 5 M'+(80+d)+' 34 l-8 -5 M'+(80+d)+' 34 l-8 5" stroke="#E67E22" stroke-width="2.5" fill="none"/>' +
+    '<text x="'+(80+d/2)+'" y="29" text-anchor="middle" fill="#b35f0e" font-size="14" font-weight="700" font-family="Montserrat,sans-serif">'+h.siembra.distancia+' cm</text>' +
+    // Panel inferior: profundidad (vista de lado)
+    '<rect x="10" y="115" width="500" height="105" rx="12" fill="#f7f3ec" stroke="#dfe8df"/>' +
+    '<text x="24" y="108" fill="#5b6b5f" font-size="12" font-family="Nunito,sans-serif">Vista lateral · profundidad de siembra</text>' +
+    '<rect x="10" y="'+(tierraY+50)+'" width="500" height="52" rx="0" fill="#a9743f"/>' +
+    '<circle cx="120" cy="'+(tierraY+50+prof)+'" r="8" fill="'+h.color+'"/>' +
+    '<line x1="160" y1="'+(tierraY+50)+'" x2="160" y2="'+(tierraY+50+prof)+'" stroke="#E67E22" stroke-width="2.5"/>' +
+    '<path d="M160 '+(tierraY+50+prof)+' l-5 -8 M160 '+(tierraY+50+prof)+' l5 -8" stroke="#E67E22" stroke-width="2.5" fill="none"/>' +
+    '<text x="172" y="'+(tierraY+50+prof/2+5)+'" fill="#b35f0e" font-size="14" font-weight="700" font-family="Montserrat,sans-serif">'+h.siembra.profundidad+' cm</text>' +
+    '<text x="120" y="'+(tierraY+50-10)+'" text-anchor="middle" fill="#5b6b5f" font-size="12" font-family="Nunito,sans-serif">'+h.nombre+(h.siembra.trasplante ? " (trasplante)" : " (siembra directa)")+'</text>' +
+    '</svg>';
+}
+
+/* Pequeña barra de nutrientes para el detalle */
+function barraNutriente(etiqueta, valor, color){
+  const fila = crear("div","","dato-barra");
+  fila.appendChild(crear("span", etiqueta));
+  const pista = crear("span","","pista");
+  const relleno = crear("span","");
+  relleno.style.width = (valor/5*100) + "%";
+  relleno.style.background = color;
+  pista.appendChild(relleno);
+  fila.appendChild(pista);
+  fila.appendChild(crear("strong", valor + "/5"));
+  return fila;
+}
+
+function abrirDetalle(id){
+  const h = porId(id);
+  if(!h) return;
+  const cont = $("#detalle-contenido");
+  cont.textContent = "";
+
+  // Cabecera con icono, nombre y chips
+  const cab = crear("div","","detalle-cabecera");
+  cab.style.setProperty("--acento", h.color);
+  const ico = crear("div","","icono-planta"); ponerSVG(ico, h.icono);
+  const info = crear("div","");
+  info.appendChild(crear("h2", h.nombre));
+  const chips = crear("div","");
+  const chipTipo = crear("span", h.tipo, "chip"); chips.appendChild(chipTipo);
+  chips.appendChild(crear("span", "Dificultad " + h.dificultad + " " + estrellasDificultad(h.dificultad), "chip dificil-" + h.dificultad));
+  chips.appendChild(crear("span", (h.sol === "pleno" ? "Sol pleno" : "Semisombra"), "chip"));
+  chips.appendChild(crear("span", "Agua " + h.agua, "chip"));
+  info.appendChild(chips);
+  info.appendChild(crear("p", h.basico));
+  cab.appendChild(ico); cab.appendChild(info);
+  cont.appendChild(cab);
+
+  const grid = crear("div","","detalle-grid");
+
+  // Bloque esquema de siembra
+  const bSiembra = crear("div","","bloque");
+  bSiembra.appendChild(crear("h3","Cómo sembrarla"));
+  const esq = crear("div",""); ponerSVG(esq, esquemaSiembra(h));
+  bSiembra.appendChild(esq);
+  grid.appendChild(bSiembra);
+
+  // Bloque sol y agua
+  const bClima = crear("div","","bloque");
+  bClima.appendChild(crear("h3","Sol y agua"));
+  const filaSol = crear("div","","fila-mini");
+  filaSol.style.justifyContent = "flex-start";
+  const sIco = crear("span",""); ponerSVG(sIco, iconoSol(h.sol)); filaSol.appendChild(sIco);
+  filaSol.appendChild(crear("span", h.sol === "pleno" ? "Necesita sol pleno (6-8 h)" : "Tolera semisombra"));
+  bClima.appendChild(filaSol);
+  const filaAgua = crear("div","","fila-mini");
+  filaAgua.style.justifyContent = "flex-start";
+  const aIco = crear("span",""); ponerSVG(aIco, iconoAgua(h.agua)); filaAgua.appendChild(aIco);
+  filaAgua.appendChild(crear("span", "Riego " + h.agua));
+  bClima.appendChild(filaAgua);
+  grid.appendChild(bClima);
+
+  // Bloque nutrientes
+  const bNutri = crear("div","","bloque");
+  bNutri.style.setProperty("--acento", h.color);
+  bNutri.appendChild(crear("h3","Aporte nutricional (0-5)"));
+  bNutri.appendChild(barraNutriente("Vitamina A", h.nutrientes.vitA, "#F1C40F"));
+  bNutri.appendChild(barraNutriente("Vitamina C", h.nutrientes.vitC, "#E67E22"));
+  bNutri.appendChild(barraNutriente("Hierro", h.nutrientes.hierro, "#C0392B"));
+  bNutri.appendChild(barraNutriente("Calcio", h.nutrientes.calcio, "#3498DB"));
+  bNutri.appendChild(barraNutriente("Fibra", h.nutrientes.fibra, "#27AE60"));
+  grid.appendChild(bNutri);
+
+  // Bloque compañeras (mismas funciones simétricas que el planificador)
+  const bComp = crear("div","","bloque");
+  bComp.appendChild(crear("h3","Buena compañía ✓"));
+  const ulC = crear("ul","","lista-plantas");
+  const companerasSim = HORTALIZAS.filter(o => o.id !== h.id && sonCompaneras(h.id, o.id));
+  if(companerasSim.length === 0) ulC.appendChild(crear("li","Sin asociaciones destacadas"));
+  companerasSim.forEach(o => {
+    const li = crear("li","","si");
+    const icoLi = crear("span",""); ponerSVG(icoLi, ICONOS.check); li.appendChild(icoLi);
+    li.appendChild(crear("span", o.nombre));
+    ulC.appendChild(li);
+  });
+  bComp.appendChild(ulC);
+  grid.appendChild(bComp);
+
+  // Bloque enemigas (mismas funciones simétricas que el planificador)
+  const bEne = crear("div","","bloque");
+  bEne.appendChild(crear("h3","Malas compañías ✗"));
+  const ulE = crear("ul","","lista-plantas");
+  const enemigasSim = HORTALIZAS.filter(o => o.id !== h.id && sonEnemigas(h.id, o.id));
+  if(enemigasSim.length === 0) ulE.appendChild(crear("li","No tiene enemigas conocidas"));
+  enemigasSim.forEach(o => {
+    const li = crear("li","","no");
+    const icoLi = crear("span",""); ponerSVG(icoLi, ICONOS.cruz); li.appendChild(icoLi);
+    li.appendChild(crear("span", o.nombre));
+    ulE.appendChild(li);
+  });
+  bEne.appendChild(ulE);
+  grid.appendChild(bEne);
+
+  // Bloque detalle experto
+  const bExp = crear("div","","bloque experto-contenido");
+  bExp.appendChild(crear("h3","Detalle experto"));
+  bExp.appendChild(crear("p", h.experto));
+  grid.appendChild(bExp);
+
+  cont.appendChild(grid);
+  navegar("detalle");
+}
+$("#btn-volver-catalogo").addEventListener("click", () => navegar("hortalizas"));
+/* =========================================================================
+   J. VISTA DISEÑO — DRAG & DROP Y COMPATIBILIDAD
+   -------------------------------------------------------------------------
+   Lógica de compatibilidad: al soltar una planta en la celda (r,c) se
+   comparan SOLO las 4 vecinas ortogonales. Si alguna es enemiga => borde
+   rojo punteado + tooltip de advertencia. Si hay compañeras => borde verde
+   / amarillo (boost). Función evaluarCelda() concentra esta regla.
+   ========================================================================= */
+/* Selecciona/deselecciona una planta para el modo táctil/teclado */
+let ignorarClickPaleta = false;
+function seleccionarPlanta(id){
+  estado.plantaSel = (estado.plantaSel === id) ? null : id;
+  $$(".paleta-item").forEach(it => {
+    const on = it.dataset.id === estado.plantaSel;
+    it.classList.toggle("seleccionada", on);
+    it.setAttribute("aria-pressed", on ? "true" : "false");
+  });
+}
+
+function renderPaleta(){
+  const pal = $("#paleta");
+  // Conservar el título y la ayuda
+  const h3 = pal.querySelector("h3");
+  pal.textContent = "";
+  pal.appendChild(h3);
+  pal.appendChild(crear("p","Mantén y arrastra hacia una celda, o toca una planta y luego una celda.")).style.fontSize = ".78rem";
+  HORTALIZAS.forEach(h => {
+    const item = crear("div","","paleta-item");
+    item.draggable = true;
+    item.dataset.id = h.id;
+    item.setAttribute("role","button");
+    item.setAttribute("tabindex","0");
+    item.setAttribute("aria-label","Arrastrar " + h.nombre + " al huerto");
+    item.setAttribute("aria-pressed","false");
+    item.addEventListener("click", () => {
+      if(ignorarClickPaleta) return;
+      seleccionarPlanta(h.id);
+    });
+    item.addEventListener("keydown", e => {
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); seleccionarPlanta(h.id); }
+    });
+    const ico = crear("span",""); ponerSVG(ico, h.icono);
+    const txt = crear("span","");
+    txt.appendChild(crear("div", h.nombre, "pi-nombre"));
+    txt.appendChild(crear("div", h.tipo, "pi-tipo"));
+    item.appendChild(ico); item.appendChild(txt);
+    pal.appendChild(item);
+  });
+}
+
+/* Activa una celda: quita si está ocupada o coloca la planta seleccionada.
+   Se usa con clic/toque y con Enter/Espacio (teclado). */
+function activarCelda(celda){
+  const r = +celda.dataset.r, c = +celda.dataset.c;
+  if(Date.now() < bloquearClick) return; // evita quitar por error al colocar
+  if(estado.huerto[r][c]){
+    estado.huerto[r][c] = null;
+    pintarEntorno(r,c);
+    renderContadores();
+  } else if(estado.plantaSel){
+    colocarPlanta(r,c,estado.plantaSel);
+  }
+}
+
+/* Construye la cuadrícula 6x6 (una sola vez) */
+function renderHuerto(){
+  const cont = $("#huerto");
+  cont.textContent = "";
+  for(let r=0;r<6;r++){
+    const fila = crear("div","");
+    fila.setAttribute("role","row");
+    fila.style.display = "contents"; // el grid del contenedor sigue mandando en el layout
+    for(let c=0;c<6;c++){
+      const celda = crear("div","","celda");
+      celda.dataset.r = r; celda.dataset.c = c;
+      celda.setAttribute("role","gridcell");
+      celda.setAttribute("aria-label","Fila " + (r+1) + ", columna " + (c+1) + ", vacía");
+      celda.tabIndex = 0;
+      celda.addEventListener("click", () => activarCelda(celda));
+      celda.addEventListener("keydown", e => {
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); activarCelda(celda); }
+      });
+      fila.appendChild(celda);
+    }
+    cont.appendChild(fila);
+  }
+}
+let bloquearClick = 0;
+
+/* Devuelve el estado de compatibilidad de la celda (r,c) con la planta id */
+function evaluarCelda(r, c, id){
+  const motivos = [];
+  let boost = false;
+  const vecinas = [[r-1,c],[r+1,c],[r,c-1],[r,c+1]];
+  vecinas.forEach(([nr,nc]) => {
+    if(nr<0||nr>5||nc<0||nc>5) return;
+    const vecino = estado.huerto[nr][nc];
+    if(!vecino) return;
+    if(sonEnemigas(id, vecino)){
+      motivos.push(porId(vecino).nombre);
+    } else if(sonCompaneras(id, vecino)){
+      boost = true;
+    }
+  });
+  if(motivos.length) return { estado:"warn", motivos:motivos };
+  if(boost) return { estado:"boost", motivos:[] };
+  return { estado:"ok", motivos:[] };
+}
+
+/* Pinta una celda según su contenido y compatibilidad */
+function pintarCelda(r, c){
+  const celda = $("#huerto").querySelector('.celda[data-r="'+r+'"][data-c="'+c+'"]');
+  if(!celda) return;
+  const id = estado.huerto[r][c];
+  celda.className = "celda";
+  celda.textContent = "";
+  celda.removeAttribute("title");
+  const base = "Fila " + (r+1) + ", columna " + (c+1);
+  if(!id){
+    celda.setAttribute("aria-label", base + ", vacía");
+    return;
+  }
+  const h = porId(id);
+  celda.classList.add("ocupada");
+  const ico = crear("div","","icono-planta"); ponerSVG(ico, h.icono);
+  celda.appendChild(ico);
+
+  const ev = evaluarCelda(r,c,id);
+  let compat;
+  if(ev.estado === "warn"){
+    celda.classList.add("incompatible");
+    compat = "incompatible con " + ev.motivos.join(", ");
+    const tip = crear("span", "⚠ Mala vecina: " + ev.motivos.join(", ") + " (planta " + h.nombre + ")", "tip");
+    celda.appendChild(tip);
+  } else if(ev.estado === "boost"){
+    celda.classList.add("boost");
+    compat = "buena compañía";
+    const badge = crear("span","","badge-boost"); ponerSVG(badge, ICONOS.boost);
+    celda.appendChild(badge);
+  } else {
+    celda.classList.add("compatible");
+    compat = "compatible";
+  }
+  celda.setAttribute("aria-label", base + ", " + h.nombre + ", " + compat);
+}
+/* Repinta la celda y sus 4 vecinas (su compatibilidad puede cambiar) */
+function pintarEntorno(r,c){
+  pintarCelda(r,c);
+  [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].forEach(([nr,nc]) => {
+    if(nr>=0&&nr<6&&nc>=0&&nc<6) pintarCelda(nr,nc);
+  });
+}
+
+/* Coloca una planta en la celda (r,c) */
+function colocarPlanta(r, c, id){
+  if(!porId(id)) return;
+  estado.huerto[r][c] = id;
+  pintarEntorno(r,c);
+  renderContadores();
+  bloquearClick = Date.now() + 450; // evita que el clic inmediato la quite
+}
+
+/* Contadores dinámicos por especie + celdas ocupadas */
+function renderContadores(){
+  const panel = $("#panel-contadores");
+  panel.textContent = "";
+  const conteo = {};
+  let ocupadas = 0;
+  estado.huerto.forEach(fila => fila.forEach(id => {
+    if(id){ conteo[id] = (conteo[id]||0)+1; ocupadas++; }
+  }));
+  const total = crear("div","","contador");
+  total.appendChild(crear("span","Celdas ocupadas:"));
+  total.appendChild(crear("span", ocupadas + "/36", "num"));
+  panel.appendChild(total);
+  Object.keys(conteo).forEach(id => {
+    const h = porId(id);
+    const c = crear("div","","contador");
+    const ico = crear("span",""); ponerSVG(ico, h.icono);
+    c.appendChild(ico);
+    c.appendChild(crear("span", h.nombre));
+    c.appendChild(crear("span", String(conteo[id]), "num"));
+    panel.appendChild(c);
+  });
+}
+
+/* --- HTML5 drag & drop (ratón) --- */
+const huertoEl = $("#huerto");
+document.addEventListener("dragstart", e => {
+  const item = e.target.closest(".paleta-item");
+  if(!item) return;
+  estado.dragId = item.dataset.id;
+  try { e.dataTransfer.setData("text/plain", estado.dragId); } catch(err){}
+  e.dataTransfer.effectAllowed = "copy";
+});
+document.addEventListener("dragend", () => { estado.dragId = null; quitarResaltados(); });
+huertoEl.addEventListener("dragover", e => {
+  const celda = e.target.closest(".celda");
+  if(!celda) return;
+  e.preventDefault();
+  quitarResaltados();
+  celda.classList.add("sobre");
+});
+huertoEl.addEventListener("dragleave", e => {
+  const celda = e.target.closest(".celda");
+  if(celda) celda.classList.remove("sobre");
+});
+huertoEl.addEventListener("drop", e => {
+  const celda = e.target.closest(".celda");
+  if(!celda) return;
+  e.preventDefault();
+  const id = estado.dragId || (e.dataTransfer ? e.dataTransfer.getData("text/plain") : "");
+  celda.classList.remove("sobre");
+  if(id) colocarPlanta(+celda.dataset.r, +celda.dataset.c, id);
+  estado.dragId = null;
+});
+
+/* --- Fallback táctil con Pointer Events ---
+   En pantallas táctiles el drag nativo HTML5 no funciona bien: creamos un
+   "fantasma" (#ghost) que sigue el dedo y, al soltar, usamos elementFromPoint
+   para saber sobre qué celda se dejó la planta. */
+const ghost = $("#ghost");
+function moverGhost(x,y){ ghost.style.left = x + "px"; ghost.style.top = y + "px"; }
+function celdaEnPunto(x,y){
+  const el = document.elementFromPoint(x,y);
+  return el ? el.closest(".celda") : null;
+}
+function quitarResaltados(){ $$("#huerto .celda.sobre").forEach(c => c.classList.remove("sobre")); }
+document.addEventListener("pointerdown", e => {
+  if(e.pointerType === "mouse") return; // ratón usa HTML5
+  const item = e.target.closest(".paleta-item");
+  if(!item) return;
+  const id = item.dataset.id;
+  estado.dragId = id;
+  let movido = false;
+  ghost.textContent = "";
+  ponerSVG(ghost, porId(id) ? porId(id).icono : "");
+  ghost.style.width = "56px"; ghost.style.height = "56px";
+  ghost.classList.add("visible");
+  moverGhost(e.clientX, e.clientY);
+  try { item.setPointerCapture(e.pointerId); } catch(err){}
+
+  function onMove(ev){
+    movido = true;
+    moverGhost(ev.clientX, ev.clientY);
+    quitarResaltados();
+    const celda = celdaEnPunto(ev.clientX, ev.clientY);
+    if(celda) celda.classList.add("sobre");
+  }
+  function onUp(ev){
+    item.removeEventListener("pointermove", onMove);
+    item.removeEventListener("pointerup", onUp);
+    item.removeEventListener("pointercancel", onUp);
+    ghost.classList.remove("visible");
+    quitarResaltados();
+    const celda = celdaEnPunto(ev.clientX, ev.clientY);
+    if(celda) colocarPlanta(+celda.dataset.r, +celda.dataset.c, id);
+    estado.dragId = null;
+    // Si hubo arrastre, evita que el click posterior marque la planta como seleccionada
+    if(movido){
+      ignorarClickPaleta = true;
+      setTimeout(() => { ignorarClickPaleta = false; }, 400);
+    }
+  }
+  item.addEventListener("pointermove", onMove);
+  item.addEventListener("pointerup", onUp);
+  item.addEventListener("pointercancel", onUp);
+});
+
+/* Limpiar huerto */
+$("#btn-limpiar").addEventListener("click", () => {
+  for(let r=0;r<6;r++) for(let c=0;c<6;c++) estado.huerto[r][c] = null;
+  for(let r=0;r<6;r++) for(let c=0;c<6;c++) pintarCelda(r,c);
+  renderContadores();
+});
+
+/* =========================================================================
+   K. VISTA NUTRICIÓN — RADAR CHART SVG NATIVO
+   Ejes: Vitamina A, Vitamina C, Hierro, Calcio, Fibra.
+   Se dibuja una rejilla de pentágonos, luego hasta 3 polígonos de datos.
+   ========================================================================= */
+const EJES_NUTRI = [
+  { clave:"vitA",     etiqueta:"Vitamina A" },
+  { clave:"vitC",     etiqueta:"Vitamina C" },
+  { clave:"hierro",   etiqueta:"Hierro" },
+  { clave:"calcio",   etiqueta:"Calcio" },
+  { clave:"fibra",    etiqueta:"Fibra" }
+];
+const RADAR = { cx:190, cy:190, R:120, max:5 };
+
+/* Convierte (indice de eje, valor 0-5) en coordenadas del radar */
+function puntoRadar(i, valor){
+  const ang = (-90 + i * (360 / EJES_NUTRI.length)) * Math.PI / 180;
+  const r = RADAR.R * (valor / RADAR.max);
+  return { x: RADAR.cx + r * Math.cos(ang), y: RADAR.cy + r * Math.sin(ang) };
+}
+function poligonoRadar(valores){
+  return EJES_NUTRI.map((e,i) => {
+    const p = puntoRadar(i, valores[e.clave] || 0);
+    return p.x.toFixed(1) + "," + p.y.toFixed(1);
+  }).join(" ");
+}
+
+function renderRadar(){
+  const svg = $("#radar");
+  svg.textContent = "";
+  // Rejilla: 5 anillos pentagonales
+  for(let nivel=1; nivel<=5; nivel++){
+    const puntos = EJES_NUTRI.map((e,i) => {
+      const p = puntoRadar(i, nivel);
+      return p.x.toFixed(1) + "," + p.y.toFixed(1);
+    }).join(" ");
+    svg.appendChild(svgEl("polygon", { points:puntos, fill:"none", stroke:"#dfe8df", "stroke-width":1 }));
+  }
+  // Ejes y etiquetas
+  EJES_NUTRI.forEach((e,i) => {
+    const p = puntoRadar(i, 5);
+    svg.appendChild(svgEl("line", { x1:RADAR.cx, y1:RADAR.cy, x2:p.x, y2:p.y, stroke:"#c4d3c8", "stroke-width":1 }));
+    const lp = puntoRadar(i, 5.85);
+    const t = svgEl("text", {
+      x:lp.x, y:lp.y, "text-anchor":"middle", "dominant-baseline":"middle",
+      "font-size":"12", "font-family":"Nunito,sans-serif", "font-weight":"700", fill:"#42523f"
+    });
+    t.textContent = e.etiqueta;
+    svg.appendChild(t);
+  });
+
+  // Polígonos de las hortalizas seleccionadas
+  estado.nutri.forEach((id, idx) => {
+    const h = porId(id);
+    if(!h) return;
+    const color = COLORES_NUTRI[idx % COLORES_NUTRI.length];
+    svg.appendChild(svgEl("polygon", {
+      points: poligonoRadar(h.nutrientes),
+      fill: color, "fill-opacity":"0.22", stroke: color, "stroke-width":"2.5",
+      "stroke-linejoin":"round"
+    }));
+    // Puntos en los vértices
+    EJES_NUTRI.forEach((e,i) => {
+      const p = puntoRadar(i, h.nutrientes[e.clave] || 0);
+      svg.appendChild(svgEl("circle", { cx:p.x, cy:p.y, r:3.5, fill:color }));
+    });
+  });
+
+  // Leyenda
+  const leyenda = $("#leyenda-radar");
+  leyenda.textContent = "";
+  estado.nutri.forEach((id, idx) => {
+    const h = porId(id);
+    const span = crear("span");
+    const muestra = crear("span","","muestra-color");
+    muestra.style.background = COLORES_NUTRI[idx % COLORES_NUTRI.length];
+    span.appendChild(muestra);
+    span.appendChild(crear("span", h.nombre));
+    leyenda.appendChild(span);
+  });
+}
+
+/* Selector de hasta 3 hortalizas */
+function renderSelectorNutricion(){
+  const cont = $("#selector-nutri");
+  cont.textContent = "";
+  HORTALIZAS.forEach(h => {
+    const label = crear("label","");
+    const chk = document.createElement("input");
+    chk.type = "checkbox";
+    chk.value = h.id;
+    chk.checked = estado.nutri.indexOf(h.id) !== -1;
+    chk.setAttribute("aria-label","Comparar " + h.nombre);
+    chk.addEventListener("change", () => {
+      if(chk.checked){
+        if(estado.nutri.length >= 3){
+          chk.checked = false;
+          $("#aviso-nutri").textContent = "Máximo 3 hortalizas. Desmarca una para elegir otra.";
+          return;
+        }
+        estado.nutri.push(h.id);
+      } else {
+        estado.nutri = estado.nutri.filter(x => x !== h.id);
+      }
+      $("#aviso-nutri").textContent = estado.nutri.length
+        ? "Comparando " + estado.nutri.length + " hortaliza(s). Escala de 0 a 5."
+        : "Escala de 0 a 5. Selecciona al menos una hortaliza.";
+      renderRadar();
+    });
+    const ico = crear("span",""); ponerSVG(ico, h.icono);
+    label.appendChild(chk); label.appendChild(ico);
+    label.appendChild(crear("span", h.nombre));
+    cont.appendChild(label);
+  });
+}
+
+/* =========================================================================
+   L. INICIALIZACIÓN
+   ========================================================================= */
+function init(){
+  cargarModo();               // preferencia guardada en localStorage
+  renderGrafo();              // vista 2
+  renderSuelo();              // vista 3
+  renderCatalogo();           // vista 4
+  renderPaleta();             // vista 5
+  renderHuerto();             // vista 5
+  renderContadores();         // vista 5
+  renderSelectorNutricion();  // vista 6
+  renderRadar();              // vista 6
+  navegar("inicio");
+}
+init();
+</script>
+</body>
+</html>
+
