@@ -634,6 +634,26 @@ const HORTALIZAS = [
     basico:"Aromática ideal junto al tomate: mejora su sabor y ahuyenta insectos.",
     experto:"Lamiaceae. Trasplante a 25 cm; pinzar las flores para prolongar la producción de hojas. Sus aceites esenciales (linalol, eugenol) tienen efecto repelente y favorecen la polinización del tomate." }
 ];
+/* B.2.b Normaliza la compatibilidad de cultivos.
+   Garantiza que companeras/enemigas sean recíprocas entre fichas, para que el
+   catálogo, la ficha de detalle y el planificador usen siempre la misma
+   relación. Si un par quedara a la vez como compañera y enemiga, prevalece la
+   incompatibilidad (enemiga). */
+(function normalizarCompatibilidad(){
+  const existe = id => HORTALIZAS.some(h => h.id === id);
+  const comp = {}, ene = {};
+  HORTALIZAS.forEach(h => { comp[h.id] = new Set(); ene[h.id] = new Set(); });
+  HORTALIZAS.forEach(h => {
+    (h.companeras || []).forEach(o => { if(o !== h.id && existe(o)){ comp[h.id].add(o); comp[o].add(h.id); } });
+    (h.enemigas   || []).forEach(o => { if(o !== h.id && existe(o)){ ene[h.id].add(o);  ene[o].add(h.id);  } });
+  });
+  HORTALIZAS.forEach(h => {
+    // Una relación no puede ser compañera y enemiga a la vez.
+    ene[h.id].forEach(o => comp[h.id].delete(o));
+    h.companeras = [...comp[h.id]];
+    h.enemigas   = [...ene[h.id]];
+  });
+})();
 /* B.3 Horizontes del suelo (barra apilada + modal) */
 const CAPAS_SUELO = [
   { id:"O", letra:"O", nombre:"Horizonte O · Capa orgánica", color:"#3e2f1c", altura:52,
